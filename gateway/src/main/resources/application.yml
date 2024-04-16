@@ -4,18 +4,17 @@ spring:
   cloud:
     config:
       discovery:
-        enabled: true
         serviceId: config-server
+        enabled: true
     gateway:
       routes:
         - id: users-service
           uri: lb://users-service
           predicates:
             - Path=/users
-
   config:
-    import: "optional:configserver:"
+   import: "optional:configserver:"
+
 
 server:
   port: 8084
-

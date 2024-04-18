@@ -11,9 +11,9 @@ spring:
     gateway:
       routes:
         - id: users-service
-          uri: http://localhost:8081
+          uri: lb://users-service
           predicates:
-            - Path=/users
+            - Path=/user/**
 
 management:
   endpoints:

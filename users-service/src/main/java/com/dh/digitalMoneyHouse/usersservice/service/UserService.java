@@ -1,10 +1,14 @@
 package com.dh.digitalMoneyHouse.usersservice.service;
 
 import com.dh.digitalMoneyHouse.usersservice.entities.User;
+import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserDTO;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserRegistrationDTO;
+import com.dh.digitalMoneyHouse.usersservice.entities.dto.mapper.UserDTOMapper;
 import com.dh.digitalMoneyHouse.usersservice.exceptions.BadRequestException;
+import com.dh.digitalMoneyHouse.usersservice.exceptions.ResourceNotFoundException;
 import com.dh.digitalMoneyHouse.usersservice.repository.UserRepository;
 import com.dh.digitalMoneyHouse.usersservice.utils.AliasCvuGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +16,19 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private AliasCvuGenerator generator;
+    @Autowired
+    private final UserDTOMapper userDTOMapper;
+
+    public UserService(UserRepository userRepository, AliasCvuGenerator generator, UserDTOMapper userDTOMapper) {
+        this.userRepository = userRepository;
+        this.generator = generator;
+        this.userDTOMapper = userDTOMapper;
+    }
+
 
     public UserRegistrationDTO createUser (UserRegistrationDTO userInformation) throws Exception {
 
@@ -58,7 +73,13 @@ public class UserService {
 
         userRepository.save(newUser);
 
-        //register user in KC and create DTO for users retrieved from DB
-        return null; //change when function is done
+        //register user in KC
+        return userInformation; //change when function is done
+    }
+
+    public UserDTO getUserById(Long id) {
+       return userRepository.findById(id)
+               .map(userDTOMapper)
+               .orElseThrow(()-> new ResourceNotFoundException("User with id " + id + " not found"));
     }
 }

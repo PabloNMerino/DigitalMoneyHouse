@@ -1,12 +1,15 @@
 package com.dh.digitalMoneyHouse.usersservice.utils;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-
+@Service
 public class AliasCvuGenerator {
 
     private Random random = new Random();
@@ -17,7 +20,7 @@ public class AliasCvuGenerator {
         List<String> chosenAlias = new ArrayList<>();
 
         try {
-            File aliasFile = new File("/Users/pablomerino/Desktop/DigitalMoneyHouse/users-service/src/main/java/com/dh/digitalMoneyHouse/usersservice/utils/alias.txt");
+            File aliasFile = new File("C:\\Users\\pablo\\OneDrive\\Escritorio\\Digital Money House\\users-service\\src\\main\\java\\com\\dh\\digitalMoneyHouse\\usersservice\\utils\\alias.txt");
             Scanner myReader = new Scanner(aliasFile);
 
             while (myReader.hasNextLine()) {

@@ -2,6 +2,7 @@ package com.dh.digitalMoneyHouse.usersservice.service;
 
 import com.dh.digitalMoneyHouse.usersservice.entities.User;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserDTO;
+import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserKeycloak;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserRegistrationDTO;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.mapper.UserDTOMapper;
 import com.dh.digitalMoneyHouse.usersservice.exceptions.BadRequestException;
@@ -20,17 +21,21 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private AliasCvuGenerator generator;
+
+    @Autowired
+    KeycloakService keycloakService;
     @Autowired
     private final UserDTOMapper userDTOMapper;
 
-    public UserService(UserRepository userRepository, AliasCvuGenerator generator, UserDTOMapper userDTOMapper) {
+    public UserService(UserRepository userRepository, AliasCvuGenerator generator, KeycloakService keycloakService, UserDTOMapper userDTOMapper) {
         this.userRepository = userRepository;
         this.generator = generator;
+        this.keycloakService = keycloakService;
         this.userDTOMapper = userDTOMapper;
     }
 
 
-    public UserRegistrationDTO createUser (UserRegistrationDTO userInformation) throws Exception {
+    public void createUser (UserRegistrationDTO userInformation) throws Exception {
 
         Optional<User> userEmailOptional = userRepository.findByEmail(userInformation.email());
         Optional<User> userUsernameOptional = userRepository.findByUsername(userInformation.username());
@@ -73,8 +78,8 @@ public class UserService {
 
         userRepository.save(newUser);
 
-        //register user in KC
-        return userInformation; //change when function is done
+        //register user in KC:
+        keycloakService.createUser(new UserKeycloak(userInformation.name(), userInformation.lastName(), userInformation.username(), userInformation.email(), userInformation.password()));
     }
 
     public UserDTO getUserById(Long id) {

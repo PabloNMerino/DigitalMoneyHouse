@@ -24,7 +24,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FOUND).body(userService.getUserById(id));
     }
 
-    @PostMapping()
+    @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody UserRegistrationDTO userRegistrationDTO) throws Exception {
         userService.createUser(userRegistrationDTO);
         return ResponseEntity.status(HttpStatus.CREATED)

@@ -1,5 +1,7 @@
 package com.dh.digitalMoneyHouse.usersservice.service;
 
+import com.dh.digitalMoneyHouse.usersservice.entities.AccessKeycloak;
+import com.dh.digitalMoneyHouse.usersservice.entities.Login;
 import com.dh.digitalMoneyHouse.usersservice.entities.User;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserDTO;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserKeycloak;
@@ -86,5 +88,21 @@ public class UserService {
        return userRepository.findById(id)
                .map(userDTOMapper)
                .orElseThrow(()-> new ResourceNotFoundException("User with id " + id + " not found"));
+    }
+
+    public AccessKeycloak login (Login loginData) throws Exception {
+        Optional<User> optionalUser = userRepository.findByEmail(loginData.getEmail());
+        if(optionalUser.isEmpty()) {
+            throw new Exception("User not found");
+        }
+        return keycloakService.login(loginData);
+    }
+
+    public Optional<User> findByEmail(String email) throws Exception {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isEmpty()){
+            throw new Exception("User not found!");
+        }
+        return user;
     }
 }

@@ -1,5 +1,7 @@
 package com.dh.digitalMoneyHouse.usersservice.controller;
 
+import com.dh.digitalMoneyHouse.usersservice.entities.AccessKeycloak;
+import com.dh.digitalMoneyHouse.usersservice.entities.Login;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserRegistrationDTO;
 import com.dh.digitalMoneyHouse.usersservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,19 @@ public class UserController {
         userService.createUser(userRegistrationDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("User " + userRegistrationDTO.username() + " succesfully created");
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<?> login(@RequestBody Login loginData) throws Exception{
+        AccessKeycloak credentials = userService.login(loginData);
+
+        if (credentials != null) {
+            return ResponseEntity.ok(credentials);
+        } else if (userService.findByEmail(loginData.getEmail()).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
 

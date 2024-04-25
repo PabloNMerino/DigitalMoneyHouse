@@ -33,7 +33,7 @@ public class UserController {
                 .body("User " + userRegistrationDTO.username() + " succesfully created");
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login loginData) throws Exception{
         AccessKeycloak credentials = userService.login(loginData);
 

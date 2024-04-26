@@ -37,7 +37,7 @@ public class UserService {
     }
 
 
-    public void createUser (UserRegistrationDTO userInformation) throws Exception {
+    public UserDTO createUser (UserRegistrationDTO userInformation) throws Exception {
 
         Optional<User> userEmailOptional = userRepository.findByEmail(userInformation.email());
         Optional<User> userUsernameOptional = userRepository.findByUsername(userInformation.username());
@@ -50,6 +50,7 @@ public class UserService {
 
         if(userEmailOptional.isPresent()) {
             throw new BadRequestException("Email already exists");
+
         }
 
         if(userUsernameOptional.isPresent()) {
@@ -82,6 +83,8 @@ public class UserService {
 
         //register user in KC:
         keycloakService.createUser(new UserKeycloak(userInformation.name(), userInformation.lastName(), userInformation.username(), userInformation.email(), userInformation.password()));
+
+        return new UserDTO(userInformation.name(), userInformation.lastName(), userInformation.username(), userInformation.email(), userInformation.phoneNumber(), newCvu, newAlias);
     }
 
     public UserDTO getUserById(Long id) {
@@ -105,4 +108,9 @@ public class UserService {
         }
         return user;
     }
+
+    public void logout(String userId) {
+        keycloakService.logout(userId);
+    }
+
 }

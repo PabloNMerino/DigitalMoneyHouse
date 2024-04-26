@@ -7,6 +7,7 @@ import com.dh.digitalMoneyHouse.usersservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +29,8 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody UserRegistrationDTO userRegistrationDTO) throws Exception {
-        userService.createUser(userRegistrationDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("User " + userRegistrationDTO.username() + " succesfully created");
+                .body(userService.createUser(userRegistrationDTO));
     }
 
     @PostMapping("/login")
@@ -45,5 +45,21 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        System.out.println(userId);
+
+        if (userId.isEmpty()) {
+            ResponseEntity.notFound().build();
+        }
+
+        userService.logout(userId);
+
+        return ResponseEntity.ok("Succesfully logged out");
+    }
+
 }
 

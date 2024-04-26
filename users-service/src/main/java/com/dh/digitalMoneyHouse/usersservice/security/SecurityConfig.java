@@ -31,8 +31,11 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/user/**")).permitAll()
-                        .anyRequest().permitAll() //corregir para el config server
+                        .requestMatchers(new AntPathRequestMatcher("/user/register")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/login")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/logout")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/actuator/**")).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)

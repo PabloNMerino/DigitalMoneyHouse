@@ -61,5 +61,10 @@ public class UserController {
         return ResponseEntity.ok("Succesfully logged out");
     }
 
+    @PutMapping("/{username}/forgot-password")
+    public void forgotPassword(@PathVariable String username) {
+        userService.forgotPassword(username);
+    }
+
 }
 

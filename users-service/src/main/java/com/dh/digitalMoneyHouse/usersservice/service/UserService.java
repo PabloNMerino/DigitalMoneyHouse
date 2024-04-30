@@ -113,4 +113,8 @@ public class UserService {
         keycloakService.logout(userId);
     }
 
+    public void forgotPassword(String username) {
+        keycloakService.forgotPassword(username);
+    }
+
 }

@@ -8,6 +8,7 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.token.TokenManager;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -125,6 +126,21 @@ public class KeycloakService {
 
     public void logout(String userId) {
         getRealm().users().get(userId).logout();
+    }
+
+    public void forgotPassword(String username) {
+        UsersResource usersResource = getRealm().users();
+        List<UserRepresentation> representationList = usersResource.searchByUsername(username, true);
+        UserRepresentation userRepresentation = representationList.stream().findFirst().orElse(null);
+        if(userRepresentation!=null) {
+            UserResource userResource = usersResource.get(userRepresentation.getId());
+            List<String> actions = new ArrayList<>();
+            actions.add(UPDATE_PASSWORD);
+
+            userResource.executeActionsEmail(actions);
+            return;
+        }
+        throw new RuntimeException("User not found");
     }
 
 

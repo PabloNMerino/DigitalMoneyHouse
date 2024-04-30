@@ -20,7 +20,9 @@ public class AliasCvuGenerator {
         List<String> chosenAlias = new ArrayList<>();
 
         try {
-            File aliasFile = new File("C:\\Users\\pablo\\OneDrive\\Escritorio\\Digital Money House\\users-service\\src\\main\\java\\com\\dh\\digitalMoneyHouse\\usersservice\\utils\\alias.txt");
+            File aliasFile = new File("/Users/pablomerino/Desktop/DigitalMoneyHouse/users-service/src/main/java/com/dh/digitalMoneyHouse/usersservice/utils/alias.txt");
+            //C:\Users\pablo\OneDrive\Escritorio\Digital Money House
+            // sers-service\src\main\java\com\dh\digitalMoneyHouseusersserviceutils\alias.txt
             Scanner myReader = new Scanner(aliasFile);
 
             while (myReader.hasNextLine()) {

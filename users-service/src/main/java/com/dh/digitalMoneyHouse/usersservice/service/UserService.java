@@ -1,6 +1,7 @@
 package com.dh.digitalMoneyHouse.usersservice.service;
 
 import com.dh.digitalMoneyHouse.usersservice.entities.AccessKeycloak;
+import com.dh.digitalMoneyHouse.usersservice.entities.AccountRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.Login;
 import com.dh.digitalMoneyHouse.usersservice.entities.User;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserDTO;
@@ -9,6 +10,7 @@ import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserRegistrationDTO;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.mapper.UserDTOMapper;
 import com.dh.digitalMoneyHouse.usersservice.exceptions.BadRequestException;
 import com.dh.digitalMoneyHouse.usersservice.exceptions.ResourceNotFoundException;
+import com.dh.digitalMoneyHouse.usersservice.repository.FeignAccountRepository;
 import com.dh.digitalMoneyHouse.usersservice.repository.UserRepository;
 import com.dh.digitalMoneyHouse.usersservice.utils.AliasCvuGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +31,15 @@ public class UserService {
     @Autowired
     private final UserDTOMapper userDTOMapper;
 
-    public UserService(UserRepository userRepository, AliasCvuGenerator generator, KeycloakService keycloakService, UserDTOMapper userDTOMapper) {
+    @Autowired
+    private FeignAccountRepository feignAccountRepository;
+
+    public UserService(UserRepository userRepository, AliasCvuGenerator generator, KeycloakService keycloakService, UserDTOMapper userDTOMapper, FeignAccountRepository feignAccountRepository) {
         this.userRepository = userRepository;
         this.generator = generator;
         this.keycloakService = keycloakService;
         this.userDTOMapper = userDTOMapper;
+        this.feignAccountRepository = feignAccountRepository;
     }
 
 
@@ -79,7 +85,9 @@ public class UserService {
                 userInformation.password()
         );
 
-        userRepository.save(newUser);
+        User userSaved = userRepository.save(newUser);
+
+        feignAccountRepository.createAccount(new AccountRequest(userSaved.getId()));
 
         //register user in KC:
         keycloakService.createUser(new UserKeycloak(userInformation.name(), userInformation.lastName(), userInformation.username(), userInformation.email(), userInformation.password()));

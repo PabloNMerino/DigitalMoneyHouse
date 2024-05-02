@@ -1,6 +1,7 @@
 package com.digitalMoneyHouse.accountsservice.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Accounts")
 public class Account {
@@ -28,5 +30,10 @@ public class Account {
     public Account(Long userId) {
         this.userId = userId;
         this.balance = 0.0;
+    }
+
+    public Account(Long userId, Double balance) {
+        this.userId = userId;
+        this.balance = balance;
     }
 }

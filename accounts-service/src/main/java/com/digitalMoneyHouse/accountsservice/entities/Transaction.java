@@ -10,8 +10,8 @@ import java.time.LocalDate;
 public class Transaction {
 
     private Long id;
-    private int originAccountId;
-    private int destinyAccountId;
+    private int senderId;
+    private int receiverId;
     private Double amountOfMoney;
     private LocalDate date;
 }

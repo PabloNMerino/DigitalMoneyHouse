@@ -2,6 +2,7 @@ package com.digitalMoneyHouse.transactionsservice.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.http.HttpStatusCode;
 
 import java.time.LocalDate;
 
@@ -14,10 +15,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Sender ID")
     private int senderId;
 
-    @Column(name = "Receiver ID")
     private int receiverId;
 
     @Column(name = "Balance")
@@ -26,6 +25,4 @@ public class Transaction {
     @Column(name = "Date")
     private LocalDate date;
 
-    @Column(name = "Type")
-    private String type;
 }

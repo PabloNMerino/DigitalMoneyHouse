@@ -24,7 +24,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(userService.getUserById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
     }
 
     @PostMapping("/register")
@@ -65,6 +65,7 @@ public class UserController {
     public void forgotPassword(@PathVariable String username) {
         userService.forgotPassword(username);
     }
+
 
 }
 

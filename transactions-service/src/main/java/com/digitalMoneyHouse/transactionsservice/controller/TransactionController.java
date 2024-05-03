@@ -9,15 +9,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/transactions")
 public class TransactionController {
 
-    @Autowired
-    private TransactionService transactionService;
 
+    private TransactionService transactionService;
+    @Autowired
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
@@ -53,9 +57,14 @@ public class TransactionController {
             return ResponseEntity.badRequest().build();
         }
     }
-/*
+
     @GetMapping("/lastTransactions/{userId}")
-    public ResponseEntity<?> getLastFiveTransactions(@PathVariable Long userId) throws ResourceNotFoundException {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionService.getLastFiveTransactionsByUserId(userId));
-    }*/
+    public ResponseEntity<List<Transaction>> getLastFiveTransactions(@PathVariable Long userId) throws ResourceNotFoundException {
+        Optional<List<Transaction>> optionalTransactions = transactionService.getLastFiveTransactionsByUserId(userId);
+        if(optionalTransactions.isPresent()){
+            return ResponseEntity.ok().body(optionalTransactions.get());
+        }
+        return (ResponseEntity<List<Transaction>>) ResponseEntity.notFound();
+        //return ResponseEntity.status(HttpStatus.OK).body(transactionService.getLastFiveTransactionsByUserId(userId));
+    }
 }

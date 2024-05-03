@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-
-    @Query(value = "SELECT * FROM Transactions WHERE senderId= ?1 OR receiverId= ?1 ORDER BY Date LIMIT 5")
+/*
+    @Query(value = "SELECT * FROM transactions WHERE senderId= ?1 OR receiverId= ?1 ORDER BY date LIMIT 5")
     List<Transaction> getLastFiveTransactionsByUserId(Long userId);
-}
+*/}

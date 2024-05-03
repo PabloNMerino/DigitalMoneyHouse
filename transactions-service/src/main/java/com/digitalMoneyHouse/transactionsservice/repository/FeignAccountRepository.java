@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface FeignAccountRepository {
 
     @GetMapping("/{id}")
-    Account getAccountById(@PathVariable Long id);
+    Account getAccountById(@PathVariable(value = "id") Long id);
 
     @PutMapping("/{id}")
-    Account updateBalance(@RequestBody Account account, @PathVariable Long id);
+    Account updateBalance(@RequestBody Account account, @PathVariable(value = "id") Long id);
 }

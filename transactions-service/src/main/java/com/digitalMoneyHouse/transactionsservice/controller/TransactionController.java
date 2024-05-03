@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/transactions")
 public class TransactionController {
@@ -16,30 +18,34 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
+
     @PostMapping("/create")
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
 
         try{
-            if(!transactionService.isAccountSaved((long) transaction.getSenderId())) {
+            Optional<Account> fromAccountOptional = transactionService.getAccount((long) transaction.getSenderId());
+            Optional<Account> toAccountOptional = transactionService.getAccount((long) transaction.getReceiverId());
+            if(fromAccountOptional.isEmpty()) {
                 return new ResponseEntity("Origin Account does not exists", HttpStatus.BAD_REQUEST);
             }
 
-            if(!transactionService.isAccountSaved((long) transaction.getReceiverId())) {
+            if(toAccountOptional.isEmpty()) {
                 return new ResponseEntity("Destiny Account does not exists", HttpStatus.BAD_REQUEST);
             }
 
-            Account originAccount = transactionService.getAccount((long) transaction.getSenderId());
-            Account destinyAccount = transactionService.getAccount((long) transaction.getReceiverId());
 
-            if(originAccount.getBalance() < transaction.getAmountOfMoney()) {
+            Account fromAccount = fromAccountOptional.get();
+            Account toAccount = toAccountOptional.get();
+
+            if(fromAccount.getBalance() < transaction.getAmountOfMoney()) {
                 return new ResponseEntity("Not enough money", HttpStatus.BAD_REQUEST);
             }
 
-            originAccount.setBalance(originAccount.getBalance()-transaction.getAmountOfMoney());
-            destinyAccount.setBalance(destinyAccount.getBalance() + transaction.getAmountOfMoney());
+            fromAccount.setBalance(fromAccount.getBalance()-transaction.getAmountOfMoney());
+            toAccount.setBalance(toAccount.getBalance() + transaction.getAmountOfMoney());
 
-            transactionService.updateAccount(originAccount);
-            transactionService.updateAccount(destinyAccount);
+            transactionService.updateAccount(fromAccount);
+            transactionService.updateAccount(toAccount);
 
             return ResponseEntity.status(HttpStatus.OK).body(transactionService.createTransaction(transaction));
 
@@ -47,9 +53,9 @@ public class TransactionController {
             return ResponseEntity.badRequest().build();
         }
     }
-
+/*
     @GetMapping("/lastTransactions/{userId}")
     public ResponseEntity<?> getLastFiveTransactions(@PathVariable Long userId) throws ResourceNotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.getLastFiveTransactionsByUserId(userId));
-    }
+    }*/
 }

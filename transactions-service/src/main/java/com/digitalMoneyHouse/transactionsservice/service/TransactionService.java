@@ -6,8 +6,9 @@ import com.digitalMoneyHouse.transactionsservice.exceptions.ResourceNotFoundExce
 import com.digitalMoneyHouse.transactionsservice.repository.FeignAccountRepository;
 import com.digitalMoneyHouse.transactionsservice.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,14 @@ public class TransactionService {
 
     public Optional<List<Transaction>> getLastFiveTransactionsByUserId(Long userId) throws ResourceNotFoundException {
         List<Transaction> lastFiveTransactions = transactionRepository.getLastFiveTransactionsByUserId(userId, Pageable.ofSize(5));
+        if(lastFiveTransactions==null || lastFiveTransactions.isEmpty()) {
+            throw new ResourceNotFoundException("No transactions found");
+        }
+        return Optional.of(lastFiveTransactions);
+    }
+
+    public Optional<List<Transaction>> getAllTransactions() throws ResourceNotFoundException {
+        List<Transaction> lastFiveTransactions = transactionRepository.findAll();
         if(lastFiveTransactions==null || lastFiveTransactions.isEmpty()) {
             throw new ResourceNotFoundException("No transactions found");
         }

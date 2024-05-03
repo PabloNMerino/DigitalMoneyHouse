@@ -16,8 +16,8 @@ import java.util.Optional;
 @RequestMapping("/transactions")
 public class TransactionController {
 
-
     private TransactionService transactionService;
+
     @Autowired
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
@@ -66,5 +66,12 @@ public class TransactionController {
         }
         return (ResponseEntity<List<Transaction>>) ResponseEntity.notFound();
         //return ResponseEntity.status(HttpStatus.OK).body(transactionService.getLastFiveTransactionsByUserId(userId));
+    }
+
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Transaction>> getAllTransactions() throws ResourceNotFoundException {
+        Optional<List<Transaction>> transactionsOptional = transactionService.getAllTransactions();
+        return ResponseEntity.status(HttpStatus.OK).body(transactionsOptional.get());
     }
 }

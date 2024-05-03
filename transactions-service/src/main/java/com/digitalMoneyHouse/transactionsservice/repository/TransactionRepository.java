@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    @Query(value = " FROM transactions WHERE (senderId= ?1 OR receiverId= ?1) ORDER BY date DESC")
+    @Query(value = "SELECT * FROM transactions WHERE (sender_id= ?1 OR receiver_id= ?1) ORDER BY date DESC", nativeQuery = true)
     List<Transaction> getLastFiveTransactionsByUserId(Long userId, Pageable pageable);
 
 }

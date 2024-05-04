@@ -54,6 +54,7 @@ public class TransactionService {
         return Optional.of(lastFiveTransactions);
     }
 
+
     public void updateAccount(Account account) {
         feignAccountRepository.updateBalance(account, account.getId());
     }

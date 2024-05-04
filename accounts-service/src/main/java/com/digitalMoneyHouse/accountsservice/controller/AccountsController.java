@@ -34,9 +34,5 @@ public class AccountsController {
     public ResponseEntity<?> getLastFiveTransactions (@PathVariable Long id) throws ResourceNotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(accountsService.getLastFiveTransactions(id));
     }
-/*
-    @PutMapping("/{userId}")
-    public ResponseEntity<?> updateAccount(@RequestBody Account account) {
-        return ResponseEntity.status(HttpStatus.OK).body(accountsService.updateAccount(account));
-    }*/
+
 }

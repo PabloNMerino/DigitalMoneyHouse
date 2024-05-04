@@ -65,7 +65,7 @@ public class TransactionController {
             return ResponseEntity.ok().body(optionalTransactions.get());
         }
         return (ResponseEntity<List<Transaction>>) ResponseEntity.notFound();
-        //return ResponseEntity.status(HttpStatus.OK).body(transactionService.getLastFiveTransactionsByUserId(userId));
+
     }
 
 
@@ -74,4 +74,5 @@ public class TransactionController {
         Optional<List<Transaction>> transactionsOptional = transactionService.getAllTransactions();
         return ResponseEntity.status(HttpStatus.OK).body(transactionsOptional.get());
     }
+
 }

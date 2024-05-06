@@ -4,6 +4,7 @@ import com.dh.digitalMoneyHouse.usersservice.entities.AccessKeycloak;
 import com.dh.digitalMoneyHouse.usersservice.entities.AccountRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.Login;
 import com.dh.digitalMoneyHouse.usersservice.entities.User;
+import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewAliasRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserDTO;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserKeycloak;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserRegistrationDTO;
@@ -125,5 +126,36 @@ public class UserService {
         keycloakService.forgotPassword(username);
     }
 
+    public void updateAlias(long id, NewAliasRequest newAlias) throws BadRequestException {
+        String aliasRequest = newAlias.getAlias();
+
+        if (aliasRequest == null || aliasRequest.length() == 0) {
+            throw new BadRequestException("No alias found");
+        }
+
+        if (Character.isDigit(aliasRequest.charAt(0))) {
+            throw new BadRequestException("Alias can't start with a number");
+        }
+
+        if(aliasRequest.trim().length()<=3) {
+            throw  new BadRequestException("alias must have at least 4 characters");
+        }
+
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if(userOptional.isEmpty()) {
+            throw  new ResourceNotFoundException("User not found");
+        }
+
+        if(userRepository.findByAlias(aliasRequest).isPresent()) {
+            throw  new BadRequestException("alias already exists");
+        }
+
+        User userFound = userOptional.get();
+
+        userFound.setAlias(aliasRequest);
+
+        userRepository.save(userFound);
+    }
 
 }

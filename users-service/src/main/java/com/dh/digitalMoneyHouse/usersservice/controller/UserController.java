@@ -2,13 +2,14 @@ package com.dh.digitalMoneyHouse.usersservice.controller;
 
 import com.dh.digitalMoneyHouse.usersservice.entities.AccessKeycloak;
 import com.dh.digitalMoneyHouse.usersservice.entities.Login;
+import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewAliasRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserRegistrationDTO;
+import com.dh.digitalMoneyHouse.usersservice.exceptions.BadRequestException;
 import com.dh.digitalMoneyHouse.usersservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -66,6 +67,11 @@ public class UserController {
         userService.forgotPassword(username);
     }
 
+    @PatchMapping("/update-alias/{id}")
+    public ResponseEntity<?> updateAlias(@PathVariable Long id, @RequestBody NewAliasRequest newAlias) throws BadRequestException {
+        userService.updateAlias(id,newAlias);
+        return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.OK);
+    }
 
 }
 

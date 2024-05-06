@@ -75,6 +75,8 @@ public class UserService {
            newAlias= generator.generateAlias();
         } while (users.stream().anyMatch(user -> user.getAlias().equals(finalNewAlias)));
 
+
+
         User newUser = new User(
                 userInformation.name(),
                 userInformation.lastName(),
@@ -86,12 +88,15 @@ public class UserService {
                 userInformation.password()
         );
 
+        //register user in KC:
+        User userKc = keycloakService.createUser(newUser);
+        newUser.setKeycloakId(userKc.getKeycloakId());
+
+        //register in database
         User userSaved = userRepository.save(newUser);
 
+        //create account for user
         feignAccountRepository.createAccount(new AccountRequest(userSaved.getId()));
-
-        //register user in KC:
-        keycloakService.createUser(new UserKeycloak(userInformation.name(), userInformation.lastName(), userInformation.username(), userInformation.email(), userInformation.password()));
 
         return new UserDTO(userInformation.name(), userInformation.lastName(), userInformation.username(), userInformation.email(), userInformation.phoneNumber(), newCvu, newAlias);
     }
@@ -129,26 +134,12 @@ public class UserService {
     public void updateAlias(long id, NewAliasRequest newAlias) throws BadRequestException {
         String aliasRequest = newAlias.getAlias();
 
-        if (aliasRequest == null || aliasRequest.length() == 0) {
-            throw new BadRequestException("No alias found");
-        }
-
-        if (Character.isDigit(aliasRequest.charAt(0))) {
-            throw new BadRequestException("Alias can't start with a number");
-        }
-
-        if(aliasRequest.trim().length()<=3) {
-            throw  new BadRequestException("alias must have at least 4 characters");
-        }
+        checkAliasField(aliasRequest);
 
         Optional<User> userOptional = userRepository.findById(id);
 
         if(userOptional.isEmpty()) {
             throw  new ResourceNotFoundException("User not found");
-        }
-
-        if(userRepository.findByAlias(aliasRequest).isPresent()) {
-            throw  new BadRequestException("alias already exists");
         }
 
         User userFound = userOptional.get();
@@ -158,4 +149,43 @@ public class UserService {
         userRepository.save(userFound);
     }
 
+    public void updateUser(Long id, UserDTO userDTO) throws BadRequestException {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if(userOptional.isEmpty()) {
+            throw new ResourceNotFoundException("User not found");
+        }
+
+        User userFound = userOptional.get();
+
+        userFound.setName(userDTO.name());
+        userFound.setLastName(userDTO.lastName());
+        userFound.setUsername(userDTO.username());
+        userFound.setEmail(userDTO.email());
+        userFound.setPhoneNumber(userDTO.phoneNumber());
+
+        checkAliasField(userDTO.alias());
+        userFound.setAlias(userDTO.alias());
+
+        userRepository.save(userFound);
+        keycloakService.updateUser(userOptional.get(), userFound);
+    }
+
+    private void checkAliasField (String alias) throws BadRequestException {
+        if (alias == null || alias.length() == 0) {
+            throw new BadRequestException("No alias found");
+        }
+
+        if (Character.isDigit(alias.charAt(0))) {
+            throw new BadRequestException("Alias can't start with a number");
+        }
+
+        if(alias.trim().length()<=3) {
+            throw  new BadRequestException("alias must have at least 4 characters");
+        }
+
+        if(userRepository.findByAlias(alias).isPresent()) {
+            throw  new BadRequestException("alias already exists");
+        }
+    }
 }

@@ -3,9 +3,11 @@ package com.dh.digitalMoneyHouse.usersservice.service;
 import com.dh.digitalMoneyHouse.usersservice.config.KeycloakClientConfig;
 import com.dh.digitalMoneyHouse.usersservice.entities.AccessKeycloak;
 import com.dh.digitalMoneyHouse.usersservice.entities.Login;
+import com.dh.digitalMoneyHouse.usersservice.entities.User;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserKeycloak;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.Response;
+import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
@@ -45,17 +47,17 @@ public class KeycloakService {
         return keycloakClientConfig.getInstance().realm(realm);
     }
 
-    public UserKeycloak createUser(UserKeycloak userKeycloak) throws Exception {
+    public User createUser(User userKeycloak) throws Exception {
         UserRepresentation userRepresentation = new UserRepresentation();
         userRepresentation.setEnabled(true);
-        userRepresentation.setUsername(userKeycloak.username());
-        userRepresentation.setEmail(userKeycloak.email());
-        userRepresentation.setFirstName(userKeycloak.name());
-        userRepresentation.setLastName(userKeycloak.lastName());
+        userRepresentation.setUsername(userKeycloak.getUsername());
+        userRepresentation.setEmail(userKeycloak.getEmail());
+        userRepresentation.setFirstName(userKeycloak.getName());
+        userRepresentation.setLastName(userKeycloak.getLastName());
         userRepresentation.setEmailVerified(false);
 
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-        credentialRepresentation.setValue(userKeycloak.password());
+        credentialRepresentation.setValue(userKeycloak.getPassword());
         credentialRepresentation.setTemporary(false);
         credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
 
@@ -76,12 +78,12 @@ public class KeycloakService {
             throw new BadRequestException("(!) something happened, try again later");
         }
 
-        List<UserRepresentation> emailsFound = getRealm().users().searchByEmail(userKeycloak.email(), true);
+        List<UserRepresentation> emailsFound = getRealm().users().searchByEmail(userKeycloak.getEmail(), true);
         if(emailsFound.isEmpty()) {
             System.out.println("No emails registered");
         }
 
-        List<UserRepresentation> userRepresentations = getRealm().users().searchByUsername(userKeycloak.username(), true);
+        List<UserRepresentation> userRepresentations = getRealm().users().searchByUsername(userKeycloak.getUsername(), true);
         if(!CollectionUtils.isEmpty(userRepresentations)) {
             UserRepresentation userRepresentation1 = userRepresentations.stream().filter(userRep -> Objects.equals(false, userRep.isEmailVerified())).findFirst().orElse(null);
             assert userRepresentation1 != null;
@@ -89,9 +91,9 @@ public class KeycloakService {
             System.out.println("------ EMAIL SENT TO USER " + userRepresentation1.getId());
         }
 
-        // userRepresentation.setId(CreatedResponseUtil.getCreatedId(response));
+        userRepresentation.setId(CreatedResponseUtil.getCreatedId(response));
 
-        return userKeycloak;
+        return User.toUser(userRepresentation);
     }
 
     public void emailVerification(String userId) {
@@ -141,6 +143,11 @@ public class KeycloakService {
             return;
         }
         throw new RuntimeException("User not found");
+    }
+
+    public void updateUser(User oldUserData, User newUserData) {
+        UserResource userResource = getRealm().users().get(oldUserData.getKeycloakId());
+
     }
 
 

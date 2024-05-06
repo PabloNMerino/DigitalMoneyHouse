@@ -1,9 +1,11 @@
 package com.dh.digitalMoneyHouse.usersservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.keycloak.representations.idm.UserRepresentation;
 
 
 
@@ -42,6 +44,9 @@ public class User {
     @Column(name = "Password",nullable = false)
     private String password;
 
+    @JsonIgnore
+    private String keycloakId;
+
     public User(String name, String lastName, String username, String email, String phoneNumber, String cvu, String alias, String password) {
         this.name = name;
         this.lastName = lastName;
@@ -51,5 +56,15 @@ public class User {
         this.cvu = cvu;
         this.alias = alias;
         this.password = password;
+    }
+
+    public static User toUser(UserRepresentation userRepresentation) {
+        User user = new User();
+        user.setKeycloakId(userRepresentation.getId());
+        user.setName(userRepresentation.getUsername());
+        user.setName(userRepresentation.getFirstName());
+        user.setLastName(userRepresentation.getLastName());
+        user.setEmail(userRepresentation.getEmail());
+        return user;
     }
 }

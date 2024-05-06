@@ -96,7 +96,7 @@ public class UserService {
         User userSaved = userRepository.save(newUser);
 
         //create account for user
-        //feignAccountRepository.createAccount(new AccountRequest(userSaved.getId()));
+        feignAccountRepository.createAccount(new AccountRequest(userSaved.getId()));
 
         return new UserDTO(userInformation.name(), userInformation.lastName(), userInformation.username(), userInformation.email(), userInformation.phoneNumber(), newCvu, newAlias);
     }

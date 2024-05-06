@@ -3,6 +3,8 @@ package com.dh.digitalMoneyHouse.usersservice.controller;
 import com.dh.digitalMoneyHouse.usersservice.entities.AccessKeycloak;
 import com.dh.digitalMoneyHouse.usersservice.entities.Login;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewAliasRequest;
+import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewPasswordRequest;
+import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserDTO;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserRegistrationDTO;
 import com.dh.digitalMoneyHouse.usersservice.exceptions.BadRequestException;
 import com.dh.digitalMoneyHouse.usersservice.service.UserService;
@@ -67,11 +69,31 @@ public class UserController {
         userService.forgotPassword(username);
     }
 
-    @PatchMapping("/update-alias/{id}")
-    public ResponseEntity<?> updateAlias(@PathVariable Long id, @RequestBody NewAliasRequest newAlias) throws BadRequestException {
-        userService.updateAlias(id,newAlias);
-        return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.OK);
+    @PatchMapping("/update-alias")
+    public ResponseEntity<?> updateAlias(@RequestBody NewAliasRequest newAlias) throws BadRequestException {
+        String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
+        userService.updateAlias(kcId,newAlias);
+        return ResponseEntity.ok("Alias updated succesfully");
     }
 
+    @PatchMapping("/update-user")
+    public ResponseEntity<?> updateUser(@RequestBody UserRegistrationDTO userRegistrationDTO) throws Exception {
+        String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserDTO userUpdated = userService.updateUser(kcId, userRegistrationDTO);
+
+        if(userUpdated == null) {
+            ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
+    }
+
+    @PatchMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestBody NewPasswordRequest passwordRequest) throws BadRequestException {
+        String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
+        userService.updatePassword(kcId, passwordRequest);
+
+        return ResponseEntity.ok("Password updated succesfully");
+    }
 }
 

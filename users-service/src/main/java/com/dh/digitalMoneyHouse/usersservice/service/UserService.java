@@ -5,8 +5,8 @@ import com.dh.digitalMoneyHouse.usersservice.entities.AccountRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.Login;
 import com.dh.digitalMoneyHouse.usersservice.entities.User;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewAliasRequest;
+import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewPasswordRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserDTO;
-import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserKeycloak;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserRegistrationDTO;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.mapper.UserDTOMapper;
 import com.dh.digitalMoneyHouse.usersservice.exceptions.BadRequestException;
@@ -96,7 +96,7 @@ public class UserService {
         User userSaved = userRepository.save(newUser);
 
         //create account for user
-        feignAccountRepository.createAccount(new AccountRequest(userSaved.getId()));
+        //feignAccountRepository.createAccount(new AccountRequest(userSaved.getId()));
 
         return new UserDTO(userInformation.name(), userInformation.lastName(), userInformation.username(), userInformation.email(), userInformation.phoneNumber(), newCvu, newAlias);
     }
@@ -131,12 +131,12 @@ public class UserService {
         keycloakService.forgotPassword(username);
     }
 
-    public void updateAlias(long id, NewAliasRequest newAlias) throws BadRequestException {
+    public void updateAlias(String kcId, NewAliasRequest newAlias) throws BadRequestException {
         String aliasRequest = newAlias.getAlias();
 
         checkAliasField(aliasRequest);
 
-        Optional<User> userOptional = userRepository.findById(id);
+        Optional<User> userOptional = userRepository.findByKeycloakId(kcId);
 
         if(userOptional.isEmpty()) {
             throw  new ResourceNotFoundException("User not found");
@@ -144,13 +144,18 @@ public class UserService {
 
         User userFound = userOptional.get();
 
-        userFound.setAlias(aliasRequest);
+        Optional<User> aliasOptional = userRepository.findByAlias(aliasRequest);
+        if(aliasOptional.isPresent()) {
+            throw new BadRequestException("Alias already being used");
+        } else {
+            userFound.setAlias(aliasRequest);
+        }
 
         userRepository.save(userFound);
     }
 
-    public void updateUser(Long id, UserDTO userDTO) throws BadRequestException {
-        Optional<User> userOptional = userRepository.findById(id);
+    public UserDTO updateUser(String id, UserRegistrationDTO userRegistrationDTO) throws BadRequestException {
+        Optional<User> userOptional = userRepository.findByKeycloakId(id);
 
         if(userOptional.isEmpty()) {
             throw new ResourceNotFoundException("User not found");
@@ -158,17 +163,16 @@ public class UserService {
 
         User userFound = userOptional.get();
 
-        userFound.setName(userDTO.name());
-        userFound.setLastName(userDTO.lastName());
-        userFound.setUsername(userDTO.username());
-        userFound.setEmail(userDTO.email());
-        userFound.setPhoneNumber(userDTO.phoneNumber());
-
-        checkAliasField(userDTO.alias());
-        userFound.setAlias(userDTO.alias());
+        userFound.setName(userRegistrationDTO.name());
+        userFound.setLastName(userRegistrationDTO.lastName());
+        userFound.setEmail(userRegistrationDTO.email());
+        userFound.setPhoneNumber(userRegistrationDTO.phoneNumber());
+        userFound.setPassword(userRegistrationDTO.password());
 
         userRepository.save(userFound);
         keycloakService.updateUser(userOptional.get(), userFound);
+
+        return new UserDTO(userFound.getName(), userFound.getLastName(), userFound.getUsername(), userFound.getEmail(), userFound.getPhoneNumber(), userFound.getCvu(), userFound.getAlias());
     }
 
     private void checkAliasField (String alias) throws BadRequestException {
@@ -186,6 +190,23 @@ public class UserService {
 
         if(userRepository.findByAlias(alias).isPresent()) {
             throw  new BadRequestException("alias already exists");
+        }
+    }
+
+    public void updatePassword(String kcId, NewPasswordRequest passwordRequest) throws BadRequestException {
+        if(!passwordRequest.getPassword().equals(passwordRequest.getPasswordRepeated())) {
+            throw new BadRequestException("Passwords must be equals");
+        }
+        Optional<User> userOptional = userRepository.findByKeycloakId(kcId);
+
+        if(userOptional.isEmpty()) {
+            throw new ResourceNotFoundException("user not found");
+        } else {
+            User userFound = userOptional.get();
+            userFound.setPassword(passwordRequest.getPassword());
+
+            userRepository.save(userFound);
+            keycloakService.updateUser(userOptional.get(), userFound);
         }
     }
 }

@@ -31,11 +31,15 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
+                        /*
                         .requestMatchers(new AntPathRequestMatcher("/user/register")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/user/login")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/user/logout")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/actuator/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/user/{username}/forgot-password")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/{username}/forgot-password")).permitAll() */
+                        .requestMatchers(new AntPathRequestMatcher("/user/logout")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/user/update-alias")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/user/update-password")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/user/update-user")).authenticated()
                         .anyRequest().permitAll()
                 )
                 .cors(AbstractHttpConfigurer::disable)

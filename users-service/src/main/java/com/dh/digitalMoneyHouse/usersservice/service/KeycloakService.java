@@ -21,9 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.naming.AuthenticationException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+
 
 @Service
 public class KeycloakService {
@@ -49,12 +48,17 @@ public class KeycloakService {
 
     public User createUser(User userKeycloak) throws Exception {
         UserRepresentation userRepresentation = new UserRepresentation();
+        Map<String, List<String>> attributes = new HashMap<>();
+
         userRepresentation.setEnabled(true);
         userRepresentation.setUsername(userKeycloak.getUsername());
         userRepresentation.setEmail(userKeycloak.getEmail());
         userRepresentation.setFirstName(userKeycloak.getName());
         userRepresentation.setLastName(userKeycloak.getLastName());
         userRepresentation.setEmailVerified(false);
+        attributes.put("phoneNumber", Collections.singletonList(String.valueOf(userKeycloak.getPhoneNumber())));
+        userRepresentation.setAttributes(attributes);
+
 
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setValue(userKeycloak.getPassword());
@@ -148,7 +152,50 @@ public class KeycloakService {
     public void updateUser(User oldUserData, User newUserData) {
         UserResource userResource = getRealm().users().get(oldUserData.getKeycloakId());
 
+        UserRepresentation updatedUserRepresentation = updateUserRepresentation(userResource.toRepresentation(), newUserData);
+
+        getRealm().users().get(oldUserData.getKeycloakId()).update(updatedUserRepresentation);
     }
+
+    private UserRepresentation updateUserRepresentation (UserRepresentation userRepresentation, User user) {
+
+        if (user.getName() != null && !user.getName().equals(userRepresentation.getFirstName())) {
+            userRepresentation.setFirstName(user.getName());
+        }
+
+        if (user.getLastName() != null && !Objects.equals(userRepresentation.getLastName(), user.getLastName())) {
+            userRepresentation.setLastName(user.getLastName());
+        }
+
+        if (user.getUsername() != null && !Objects.equals(userRepresentation.getUsername(), user.getUsername())) {
+            userRepresentation.setUsername(user.getUsername());
+            System.out.println("hola");
+        }
+
+        if (user.getEmail() != null && !Objects.equals(userRepresentation.getEmail(), user.getEmail())) {
+            userRepresentation.setEmail(user.getEmail());
+        }
+
+        if (user.getPassword() != null) {
+            userRepresentation.setCredentials(Collections.singletonList(newCredential(user.getPassword())));
+        }
+
+        if (user.getPhoneNumber() != null && !userRepresentation.getAttributes().get("phoneNumber").equals(user.getPhoneNumber())){
+            userRepresentation.getAttributes().put("phoneNumber", Collections.singletonList(user.getPhoneNumber()));
+        }
+
+        return userRepresentation;
+    }
+
+    private CredentialRepresentation newCredential(String password) {
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setTemporary(false);
+        credential.setType("password");
+        credential.setValue(password);
+        return credential;
+    }
+
+
 
 
 }

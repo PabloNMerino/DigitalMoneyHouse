@@ -2,11 +2,14 @@ package com.digitalMoneyHouse.cardsservice.service;
 
 import com.digitalMoneyHouse.cardsservice.entities.Card;
 import com.digitalMoneyHouse.cardsservice.exceptions.BadRequestException;
+import com.digitalMoneyHouse.cardsservice.exceptions.ResourceNotFoundException;
 import com.digitalMoneyHouse.cardsservice.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CardService {
@@ -16,7 +19,12 @@ public class CardService {
 
     public Card registerCard(Card card) throws BadRequestException {
         checkCardData(card);
-        return cardRepository.save(card);
+        Optional<Card> cardOptional = cardRepository.findByIdAndAccountId(card.getId(), card.getAccountId());
+        if(cardOptional.isPresent()) {
+            throw new BadRequestException("Card already exists");
+        } else {
+            return cardRepository.save(card);
+        }
     }
 
     private void checkCardData(Card card) throws BadRequestException {
@@ -40,8 +48,31 @@ public class CardService {
         }
     }
 
-    public Card getCardByAccountIdAndCardId(Long accountId, Long cardId) {
+    public Card getCardByIdAndAccountId(Long cardId, Long accountId) throws ResourceNotFoundException {
+        Optional<Card> cardOptional = cardRepository.findByIdAndAccountId(cardId, accountId);
 
+        if(cardOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Card not found");
+        } else {
+            return cardOptional.get();
+        }
     }
 
+    public List<Card> getAllCardsByAccountId(Long accountId) throws ResourceNotFoundException {
+        Optional<List<Card>> optionalCardList = cardRepository.findAllByAccountId(accountId);
+        if (optionalCardList.isEmpty()) {
+            throw new ResourceNotFoundException("No card list found");
+        }
+        return optionalCardList.get();
+    }
+
+    public void deleteCard(Long cardId, Long accountId) throws ResourceNotFoundException {
+        Optional<Card> optionalCard = cardRepository.findByIdAndAccountId(cardId, accountId);
+        if(optionalCard.isEmpty()) {
+            throw new ResourceNotFoundException("Card not found");
+        } else {
+            Card cardFound = optionalCard.get();
+            cardRepository.deleteByIdAndAccountId(cardId, accountId);
+        }
+    }
 }

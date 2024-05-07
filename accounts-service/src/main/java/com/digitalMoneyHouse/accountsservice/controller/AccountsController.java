@@ -35,4 +35,9 @@ public class AccountsController {
         return ResponseEntity.status(HttpStatus.OK).body(accountsService.getLastFiveTransactions(id));
     }
 
+    @PostMapping("/{id}/register-card")
+    public ResponseEntity<?> registerNewCard(@PathVariable Long id) {
+
+    }
+
 }

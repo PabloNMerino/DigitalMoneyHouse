@@ -211,6 +211,7 @@ public class UserService {
     }
 
     public Long getUserId(String kcId) {
-        userRepository.findByKeycloakId(kcId);
+       Optional<User> userOptional = userRepository.findByKeycloakId(kcId);
+       return userOptional.get().getId();
     }
 }

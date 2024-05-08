@@ -10,4 +10,7 @@ public interface FeignUserRepository {
 
     @GetMapping("/{id}")
     User getUserById(@PathVariable Long id);
+
+    @GetMapping("/id")
+    Long getUserId();
 }

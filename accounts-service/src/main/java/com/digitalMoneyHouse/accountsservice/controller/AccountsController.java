@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/account")
 public class AccountsController {
     @Autowired
     private AccountsService accountsService;
@@ -38,8 +38,24 @@ public class AccountsController {
     }
 
     @PostMapping("/register-card")
-    public ResponseEntity<?> registerNewCard(CardRequest card) {
+    public ResponseEntity<?> registerNewCard(CardRequest card) throws ResourceNotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(accountsService.registerCard(card));
+    }
+
+    @GetMapping("/cards")
+    public ResponseEntity<?> getAllCards() throws ResourceNotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(accountsService.getAllCards());
+    }
+
+    @GetMapping("/card/{id}")
+    public ResponseEntity<?> getCardById(@PathVariable Long id) throws ResourceNotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(accountsService.getCardById(id));
+    }
+
+    @DeleteMapping("/delete-card/{id}")
+    public ResponseEntity<?> deleteCardById(@PathVariable Long id) throws ResourceNotFoundException {
+        accountsService.deleteCardById(id);
+        return ResponseEntity.ok().build();
     }
 
 }

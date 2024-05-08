@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "transactions-service", url = "localhost:8083/transactions")
+@FeignClient(name = "transactions-service", url = "localhost:8083/transaction")
 public interface FeignTransactionRepository {
 
     @GetMapping("/lastTransactions/{userId}")

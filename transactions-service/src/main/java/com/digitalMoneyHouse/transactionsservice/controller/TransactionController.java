@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/transaction")
 public class TransactionController {
 
     private TransactionService transactionService;

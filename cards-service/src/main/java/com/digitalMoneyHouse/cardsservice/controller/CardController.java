@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/cards")
+@RequestMapping("/card")
 public class CardController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class CardController {
         return ResponseEntity.status(HttpStatus.OK).body(cardService.getAllCardsByAccountId(id));
     }
 
-    @GetMapping("/account/{accountId}/card/{cardId}")
+    @GetMapping("/{accountId}/card/{cardId}")
     public ResponseEntity<?> getCardByIdAndAccountId (@PathVariable Long accountId, @PathVariable Long cardId) throws ResourceNotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(cardService.getCardByIdAndAccountId(cardId, accountId));
     }
@@ -31,7 +31,7 @@ public class CardController {
         return ResponseEntity.status(HttpStatus.OK).body(cardService.registerCard(card));
     }
 
-    @DeleteMapping("/account/{accountId}/card/{cardId}")
+    @DeleteMapping("/{accountId}/card/{cardId}")
     public ResponseEntity<?> deleteCard(@PathVariable Long accountId, @PathVariable Long cardId) throws ResourceNotFoundException {
         cardService.deleteCard(cardId, accountId);
         return ResponseEntity.ok().build();

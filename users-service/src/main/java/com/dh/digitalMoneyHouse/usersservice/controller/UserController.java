@@ -99,7 +99,7 @@ public class UserController {
     @GetMapping("/id")
     public ResponseEntity<?> getUserId() {
         String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long id = userService.getUserId();
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserId(kcId));
     }
 }
 

@@ -58,9 +58,49 @@ public class AccountsService {
          return transactions;
     }
 
-    public Card registerCard(CardRequest card) {
+    public Card registerCard(CardRequest card) throws ResourceNotFoundException {
+        Long userId = feignUserRepository.getUserId();
+        Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
+        if(accountOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Account not found");
+        } else {
+            Account account = accountOptional.get();
+            Card newCard = new Card(account.getId(), card.getHolder(), card.getNumber(), card.getExpirationDate(), card.getCvv());
+            return feignCardRepository.registerCard(newCard);
+        }
+    }
 
-        return feignCardRepository.registerCard(card);
+    public List<Card> getAllCards() throws ResourceNotFoundException {
+        Long userId = feignUserRepository.getUserId();
+        Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
+        if(accountOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Account not found");
+        } else {
+            Account account = accountOptional.get();
+            return feignCardRepository.getAllCardsByAccountId(account.getId());
+        }
+    }
+
+    public Card getCardById(Long cardId) throws ResourceNotFoundException {
+        Long userId = feignUserRepository.getUserId();
+        Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
+        if(accountOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Account not found");
+        } else {
+            Account account = accountOptional.get();
+            return feignCardRepository.getCardByIdAndAccountId(account.getId(), cardId);
+        }
+    }
+
+    public void deleteCardById(Long cardId) throws ResourceNotFoundException {
+        Long userId = feignUserRepository.getUserId();
+        Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
+        if(accountOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Account not found");
+        } else {
+            Account account = accountOptional.get();
+            feignCardRepository.deleteCard(account.getId(), cardId);
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package com.digitalMoneyHouse.cardsservice.service;
 
 import com.digitalMoneyHouse.cardsservice.entities.Card;
 import com.digitalMoneyHouse.cardsservice.exceptions.BadRequestException;
+import com.digitalMoneyHouse.cardsservice.exceptions.ConflictException;
 import com.digitalMoneyHouse.cardsservice.exceptions.ResourceNotFoundException;
 import com.digitalMoneyHouse.cardsservice.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,11 @@ public class CardService {
     @Autowired
     private CardRepository cardRepository;
 
-    public Card registerCard(Card card) throws BadRequestException {
+    public Card registerCard(Card card) throws ConflictException, BadRequestException {
         checkCardData(card);
         Optional<Card> cardOptional = cardRepository.findByIdAndAccountId(card.getId(), card.getAccountId());
         if(cardOptional.isPresent()) {
-            throw new BadRequestException("Card already exists");
+            throw new ConflictException("Card already exists");
         } else {
             return cardRepository.save(card);
         }

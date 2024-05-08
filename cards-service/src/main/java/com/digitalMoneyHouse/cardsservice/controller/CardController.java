@@ -2,6 +2,7 @@ package com.digitalMoneyHouse.cardsservice.controller;
 
 import com.digitalMoneyHouse.cardsservice.entities.Card;
 import com.digitalMoneyHouse.cardsservice.exceptions.BadRequestException;
+import com.digitalMoneyHouse.cardsservice.exceptions.ConflictException;
 import com.digitalMoneyHouse.cardsservice.exceptions.ResourceNotFoundException;
 import com.digitalMoneyHouse.cardsservice.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class CardController {
     }
 
     @PostMapping("/register-card")
-    public ResponseEntity<?> registerCard(Card card) throws BadRequestException {
-        return ResponseEntity.status(HttpStatus.OK).body(cardService.registerCard(card));
+    public ResponseEntity<?> registerCard(Card card) throws BadRequestException, ConflictException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(cardService.registerCard(card));
     }
 
     @DeleteMapping("/{accountId}/card/{cardId}")

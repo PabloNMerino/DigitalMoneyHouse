@@ -3,10 +3,9 @@ package com.digitalMoneyHouse.cardsservice.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class ResourceNotFoundException extends Exception{
-    public ResourceNotFoundException(String message) {
+@ResponseStatus(HttpStatus.CONFLICT)
+public class ConflictException extends Exception{
+    public ConflictException(String message) {
         super(message);
     }
 }

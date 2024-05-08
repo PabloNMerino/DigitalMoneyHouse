@@ -39,7 +39,7 @@ public class AccountsController {
 
     @PostMapping("/register-card")
     public ResponseEntity<?> registerNewCard(CardRequest card) throws ResourceNotFoundException {
-        return ResponseEntity.status(HttpStatus.OK).body(accountsService.registerCard(card));
+        return ResponseEntity.status(HttpStatus.CREATED).body(accountsService.registerCard(card));
     }
 
     @GetMapping("/cards")

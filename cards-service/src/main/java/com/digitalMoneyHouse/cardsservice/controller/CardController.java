@@ -27,7 +27,7 @@ public class CardController {
     }
 
     @PostMapping("/register-card")
-    public ResponseEntity<?> registerCard( Card card) throws BadRequestException {
+    public ResponseEntity<?> registerCard(Card card) throws BadRequestException {
         return ResponseEntity.status(HttpStatus.OK).body(cardService.registerCard(card));
     }
 

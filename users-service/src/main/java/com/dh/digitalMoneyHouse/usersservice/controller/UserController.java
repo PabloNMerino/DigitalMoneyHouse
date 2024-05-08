@@ -95,5 +95,11 @@ public class UserController {
 
         return ResponseEntity.ok("Password updated succesfully");
     }
+
+    @GetMapping("/id")
+    public ResponseEntity<?> getUserId() {
+        String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long id = userService.getUserId();
+    }
 }
 

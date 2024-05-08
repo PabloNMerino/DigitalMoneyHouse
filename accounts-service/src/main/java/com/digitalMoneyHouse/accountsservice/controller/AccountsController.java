@@ -2,6 +2,8 @@ package com.digitalMoneyHouse.accountsservice.controller;
 
 import com.digitalMoneyHouse.accountsservice.entities.Account;
 import com.digitalMoneyHouse.accountsservice.entities.AccountRequest;
+import com.digitalMoneyHouse.accountsservice.entities.Card;
+import com.digitalMoneyHouse.accountsservice.entities.CardRequest;
 import com.digitalMoneyHouse.accountsservice.exceptions.BadRequestException;
 import com.digitalMoneyHouse.accountsservice.exceptions.ResourceNotFoundException;
 import com.digitalMoneyHouse.accountsservice.service.AccountsService;
@@ -35,9 +37,9 @@ public class AccountsController {
         return ResponseEntity.status(HttpStatus.OK).body(accountsService.getLastFiveTransactions(id));
     }
 
-    @PostMapping("/{id}/register-card")
-    public ResponseEntity<?> registerNewCard(@PathVariable Long id) {
-
+    @PostMapping("/register-card")
+    public ResponseEntity<?> registerNewCard(CardRequest card) {
+        return ResponseEntity.status(HttpStatus.OK).body(accountsService.registerCard(card));
     }
 
 }

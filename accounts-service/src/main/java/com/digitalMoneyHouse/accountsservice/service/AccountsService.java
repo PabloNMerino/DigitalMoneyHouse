@@ -1,12 +1,10 @@
 package com.digitalMoneyHouse.accountsservice.service;
 
-import com.digitalMoneyHouse.accountsservice.entities.Account;
-import com.digitalMoneyHouse.accountsservice.entities.AccountInformation;
-import com.digitalMoneyHouse.accountsservice.entities.Transaction;
-import com.digitalMoneyHouse.accountsservice.entities.User;
+import com.digitalMoneyHouse.accountsservice.entities.*;
 import com.digitalMoneyHouse.accountsservice.exceptions.BadRequestException;
 import com.digitalMoneyHouse.accountsservice.exceptions.ResourceNotFoundException;
 import com.digitalMoneyHouse.accountsservice.repository.AccountsRepository;
+import com.digitalMoneyHouse.accountsservice.repository.FeignCardRepository;
 import com.digitalMoneyHouse.accountsservice.repository.FeignTransactionRepository;
 import com.digitalMoneyHouse.accountsservice.repository.FeignUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,9 @@ public class AccountsService {
 
     @Autowired
     private FeignTransactionRepository feignTransactionRepository;
+
+    @Autowired
+    private FeignCardRepository feignCardRepository;
 
     public void createAccount(Long userId) {
         Account account = new Account(userId);
@@ -55,6 +56,11 @@ public class AccountsService {
              throw new ResourceNotFoundException("No transactions found");
          }
          return transactions;
+    }
+
+    public Card registerCard(CardRequest card) {
+
+        return feignCardRepository.registerCard(card);
     }
 
 }

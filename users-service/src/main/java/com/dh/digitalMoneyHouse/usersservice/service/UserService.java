@@ -209,4 +209,8 @@ public class UserService {
             keycloakService.updateUser(userOptional.get(), userFound);
         }
     }
+
+    public Long getUserId(String kcId) {
+        userRepository.findByKeycloakId(kcId);
+    }
 }

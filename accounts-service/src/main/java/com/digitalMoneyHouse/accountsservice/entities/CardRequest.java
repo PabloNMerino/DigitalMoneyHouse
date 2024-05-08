@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
-public class Card {
-    private Long accountId;
+public class CardRequest {
     private String holder;
     private String number;
     private LocalDate expirationDate;

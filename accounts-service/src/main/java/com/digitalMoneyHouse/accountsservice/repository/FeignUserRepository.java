@@ -12,13 +12,7 @@ public interface FeignUserRepository {
 
     @GetMapping("/{id}")
     User getUserById(@PathVariable Long id);
-/*
-    @GetMapping("/keycloak-id/{kcId}")
-    User getUserByKeycloakId(@PathVariable String kcId);
 
-    @GetMapping("/username/{username}")
-    Long getUserByUsername(@PathVariable String username);
-*/
     @GetMapping("/keycloak-id/{kcId}")
     Long getUserByKeycloakId(@PathVariable String kcId);
 

@@ -21,7 +21,7 @@ public class CardService {
 
     public Card registerCard(Card card) throws ConflictException, BadRequestException {
         checkCardData(card);
-        Optional<Card> cardOptional = cardRepository.findByIdAndAccountId(card.getId(), card.getAccountId());
+        Optional<Card> cardOptional = cardRepository.findByNumber(card.getNumber());
         if(cardOptional.isPresent()) {
             throw new ConflictException("Card already exists");
         } else {

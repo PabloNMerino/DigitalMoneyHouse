@@ -39,7 +39,7 @@ public class AccountsController {
     public ResponseEntity<?> registerNewCard(@RequestBody CardRequest card) throws ResourceNotFoundException {
         String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId=  accountsService.getUserIdByKcId(kcId);
-        return ResponseEntity.status(HttpStatus.OK).body(accountsService.registerCard(card, userId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(accountsService.registerCard(card, userId));
     }
 
     @GetMapping("/cards")

@@ -30,7 +30,7 @@ public class CardController {
 
     @PostMapping("/register-card")
     public ResponseEntity<?> registerCard(@RequestBody Card card) throws BadRequestException, ConflictException {
-        return ResponseEntity.status(HttpStatus.OK).body(cardService.registerCard(card));
+        return ResponseEntity.status(HttpStatus.CREATED).body(cardService.registerCard(card));
     }
 
     @DeleteMapping("/{accountId}/card/{cardId}")

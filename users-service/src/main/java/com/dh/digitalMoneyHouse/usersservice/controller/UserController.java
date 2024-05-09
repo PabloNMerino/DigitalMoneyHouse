@@ -30,12 +30,12 @@ public class UserController {
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
     }
-
+/*
     @GetMapping("/username/{username}")
     public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByUsername(username));
     }
-
+*/
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody UserRegistrationDTO userRegistrationDTO) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -104,7 +104,7 @@ public class UserController {
 
     @GetMapping("/keycloak-id/{kcId}")
     public ResponseEntity<?> getUserByKeycloakId(@PathVariable String kcId) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByKcId(kcId));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserIdByKcId(kcId));
     }
 }
 

@@ -102,14 +102,6 @@ public class AccountsService {
     }
 
 
-/*
-    public Long getUserIdByKcId(String kcId) {
-       UserDTO user = feignUserRepository.getUserByKeycloakId(kcId);
-       Long userId = feignUserRepository.getUserByUsername(user.getUsername());
-       return userId;
-    }
-
- */
     public Long getUserIdByKcId(String kcId) {
         Long userId = feignUserRepository.getUserByKeycloakId(kcId);
         return userId;

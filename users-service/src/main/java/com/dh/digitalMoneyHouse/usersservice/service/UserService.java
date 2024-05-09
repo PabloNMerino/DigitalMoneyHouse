@@ -104,13 +104,6 @@ public class UserService {
                .orElseThrow(()-> new ResourceNotFoundException("User with id " + id + " not found"));
     }
 
-    public UserDTO getUserByKcId(String kcId) {
-        return userRepository.findByKeycloakId(kcId)
-                .map(userDTOMapper)
-                .orElseThrow(()-> new ResourceNotFoundException("User with id " + kcId + " not found"));
-    }
-
-
     public AccessKeycloak login (Login loginData) throws Exception {
         Optional<User> optionalUser = userRepository.findByEmail(loginData.getEmail());
         if(optionalUser.isEmpty()) {
@@ -213,17 +206,6 @@ public class UserService {
             keycloakService.updateUser(userOptional.get(), userFound);
         }
     }
-/*
-    public Long getUserByUsername(String username) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        if(userOptional.isEmpty()) {
-            throw new ResourceNotFoundException("User not found");
-        } else {
-            return userOptional.get().getId();
-        }
-    }
-
- */
 
     public Long getUserIdByKcId(String kcId) {
         Optional<User> userOptional = userRepository.findByKeycloakId(kcId);

@@ -1,9 +1,6 @@
 package com.dh.digitalMoneyHouse.usersservice.service;
 
-import com.dh.digitalMoneyHouse.usersservice.entities.AccessKeycloak;
-import com.dh.digitalMoneyHouse.usersservice.entities.AccountRequest;
-import com.dh.digitalMoneyHouse.usersservice.entities.Login;
-import com.dh.digitalMoneyHouse.usersservice.entities.User;
+import com.dh.digitalMoneyHouse.usersservice.entities.*;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewAliasRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewPasswordRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserDTO;
@@ -105,6 +102,12 @@ public class UserService {
        return userRepository.findById(id)
                .map(userDTOMapper)
                .orElseThrow(()-> new ResourceNotFoundException("User with id " + id + " not found"));
+    }
+
+    public UserDTO getUserByKcId(String kcId) {
+        return userRepository.findByKeycloakId(kcId)
+                .map(userDTOMapper)
+                .orElseThrow(()-> new ResourceNotFoundException("User with id " + kcId + " not found"));
     }
 
     public AccessKeycloak login (Login loginData) throws Exception {
@@ -210,8 +213,13 @@ public class UserService {
         }
     }
 
-    public Long getUserId(String kcId) {
-       Optional<User> userOptional = userRepository.findByKeycloakId(kcId);
-       return userOptional.get().getId();
+    public Long getUserByUsername(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if(userOptional.isEmpty()) {
+            throw new ResourceNotFoundException("User not found");
+        } else {
+            return userOptional.get().getId();
+        }
     }
+
 }

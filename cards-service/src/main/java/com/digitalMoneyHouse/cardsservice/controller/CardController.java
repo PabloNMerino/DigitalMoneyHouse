@@ -5,6 +5,7 @@ import com.digitalMoneyHouse.cardsservice.exceptions.BadRequestException;
 import com.digitalMoneyHouse.cardsservice.exceptions.ConflictException;
 import com.digitalMoneyHouse.cardsservice.exceptions.ResourceNotFoundException;
 import com.digitalMoneyHouse.cardsservice.service.CardService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +29,12 @@ public class CardController {
     }
 
     @PostMapping("/register-card")
-    public ResponseEntity<?> registerCard(Card card) throws BadRequestException, ConflictException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(cardService.registerCard(card));
+    public ResponseEntity<?> registerCard(@RequestBody Card card) throws BadRequestException, ConflictException {
+        return ResponseEntity.status(HttpStatus.OK).body(cardService.registerCard(card));
     }
 
     @DeleteMapping("/{accountId}/card/{cardId}")
+    @Transactional
     public ResponseEntity<?> deleteCard(@PathVariable Long accountId, @PathVariable Long cardId) throws ResourceNotFoundException {
         cardService.deleteCard(cardId, accountId);
         return ResponseEntity.ok().build();

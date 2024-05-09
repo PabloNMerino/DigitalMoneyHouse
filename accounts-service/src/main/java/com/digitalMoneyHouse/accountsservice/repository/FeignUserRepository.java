@@ -1,7 +1,9 @@
 package com.digitalMoneyHouse.accountsservice.repository;
 
 import com.digitalMoneyHouse.accountsservice.entities.User;
+import com.digitalMoneyHouse.accountsservice.entities.UserDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -11,6 +13,10 @@ public interface FeignUserRepository {
     @GetMapping("/{id}")
     User getUserById(@PathVariable Long id);
 
-    @GetMapping("/id")
-    Long getUserId();
+    @GetMapping("/keycloak-id/{kcId}")
+    UserDTO getUserByKeycloakId(@PathVariable String kcId);
+
+    @GetMapping("/username/{username}")
+    Long getUserByUsername(@PathVariable String username);
+
 }

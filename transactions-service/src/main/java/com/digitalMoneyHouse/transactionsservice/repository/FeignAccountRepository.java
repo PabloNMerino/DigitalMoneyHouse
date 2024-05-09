@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "accounts-service", url = "localhost:8082/accounts")
+@FeignClient(name = "accounts-service", url = "localhost:8082/account")
 public interface FeignAccountRepository {
 
     @GetMapping("/{id}")

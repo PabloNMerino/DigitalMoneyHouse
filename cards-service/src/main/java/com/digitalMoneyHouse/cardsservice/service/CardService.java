@@ -5,6 +5,7 @@ import com.digitalMoneyHouse.cardsservice.exceptions.BadRequestException;
 import com.digitalMoneyHouse.cardsservice.exceptions.ConflictException;
 import com.digitalMoneyHouse.cardsservice.exceptions.ResourceNotFoundException;
 import com.digitalMoneyHouse.cardsservice.repository.CardRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +67,7 @@ public class CardService {
         }
         return optionalCardList.get();
     }
-
+    @Transactional
     public void deleteCard(Long cardId, Long accountId) throws ResourceNotFoundException {
         Optional<Card> optionalCard = cardRepository.findByIdAndAccountId(cardId, accountId);
         if(optionalCard.isEmpty()) {

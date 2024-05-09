@@ -9,8 +9,10 @@ import com.digitalMoneyHouse.accountsservice.repository.FeignTransactionReposito
 import com.digitalMoneyHouse.accountsservice.repository.FeignUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,8 +60,7 @@ public class AccountsService {
          return transactions;
     }
 
-    public Card registerCard(CardRequest card) throws ResourceNotFoundException {
-        Long userId = feignUserRepository.getUserId();
+    public Card registerCard(@RequestBody CardRequest card, Long userId) throws ResourceNotFoundException {
         Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
         if(accountOptional.isEmpty()) {
             throw new ResourceNotFoundException("Account not found");
@@ -70,8 +71,7 @@ public class AccountsService {
         }
     }
 
-    public List<Card> getAllCards() throws ResourceNotFoundException {
-        Long userId = feignUserRepository.getUserId();
+    public List<Card> getAllCards(Long userId) throws ResourceNotFoundException {
         Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
         if(accountOptional.isEmpty()) {
             throw new ResourceNotFoundException("Account not found");
@@ -81,8 +81,7 @@ public class AccountsService {
         }
     }
 
-    public Card getCardById(Long cardId) throws ResourceNotFoundException {
-        Long userId = feignUserRepository.getUserId();
+    public Card getCardById(Long cardId, Long userId) throws ResourceNotFoundException {
         Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
         if(accountOptional.isEmpty()) {
             throw new ResourceNotFoundException("Account not found");
@@ -92,8 +91,7 @@ public class AccountsService {
         }
     }
 
-    public void deleteCardById(Long cardId) throws ResourceNotFoundException {
-        Long userId = feignUserRepository.getUserId();
+    public void deleteCardById(Long cardId, Long userId) throws ResourceNotFoundException {
         Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
         if(accountOptional.isEmpty()) {
             throw new ResourceNotFoundException("Account not found");
@@ -103,4 +101,11 @@ public class AccountsService {
         }
     }
 
+
+
+    public Long getUserIdByKcId(String kcId) {
+       UserDTO user = feignUserRepository.getUserByKeycloakId(kcId);
+       Long userId = feignUserRepository.getUserByUsername(user.getUsername());
+       return userId;
+    }
 }

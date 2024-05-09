@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "accounts-service", url = "localhost:8082/accounts")
+@FeignClient(name = "accounts-service", url = "localhost:8082/account")
 public interface FeignAccountRepository {
 
     @PostMapping("/create")

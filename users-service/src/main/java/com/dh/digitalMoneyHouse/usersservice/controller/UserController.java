@@ -2,6 +2,7 @@ package com.dh.digitalMoneyHouse.usersservice.controller;
 
 import com.dh.digitalMoneyHouse.usersservice.entities.AccessKeycloak;
 import com.dh.digitalMoneyHouse.usersservice.entities.Login;
+import com.dh.digitalMoneyHouse.usersservice.entities.UserIdRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewAliasRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewPasswordRequest;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserDTO;
@@ -28,6 +29,11 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByUsername(username));
     }
 
     @PostMapping("/register")
@@ -96,10 +102,9 @@ public class UserController {
         return ResponseEntity.ok("Password updated succesfully");
     }
 
-    @GetMapping("/id")
-    public ResponseEntity<?> getUserId() {
-        String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserId(kcId));
+    @GetMapping("/keycloak-id/{kcId}")
+    public ResponseEntity<?> getUserByKeycloakId(@PathVariable String kcId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByKcId(kcId));
     }
 }
 

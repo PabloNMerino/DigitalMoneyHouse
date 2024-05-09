@@ -3,10 +3,7 @@ package com.digitalMoneyHouse.accountsservice.repository;
 import com.digitalMoneyHouse.accountsservice.entities.Card;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,7 +11,7 @@ import java.util.List;
 public interface FeignCardRepository {
 
     @PostMapping("/register-card")
-    Card registerCard(Card card);
+    Card registerCard(@RequestBody Card card);
 
     @GetMapping("/{id}/all-cards")
     List<Card> getAllCardsByAccountId(@PathVariable Long id);

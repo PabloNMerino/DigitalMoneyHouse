@@ -37,14 +37,14 @@ public class AccountsService {
         accountsRepository.save(account);
     }
 
-    public AccountInformation getAccountInformation(Long userId) throws BadRequestException {
+    public AccountInformation getAccountInformation(Long userId) throws ResourceNotFoundException {
         Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
         if(accountOptional.isPresent()) {
             Account accountFound = accountOptional.get();
             User feignUser = feignUserRepository.getUserById(userId);
             return new AccountInformation(accountFound.getId(), accountFound.getUserId() ,accountFound.getBalance(), feignUser.getAlias(), feignUser.getCvu());
         } else {
-            throw new BadRequestException("Account not found");
+            throw new ResourceNotFoundException("Account not found");
         }
     }
 

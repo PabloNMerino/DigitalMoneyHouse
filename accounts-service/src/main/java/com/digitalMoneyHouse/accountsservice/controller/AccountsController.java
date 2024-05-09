@@ -21,7 +21,7 @@ public class AccountsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAccount(@PathVariable Long id) throws BadRequestException {
+    public ResponseEntity<?> getAccount(@PathVariable Long id) throws ResourceNotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(accountsService.getAccountInformation(id));
     }
 

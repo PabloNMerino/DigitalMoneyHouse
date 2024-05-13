@@ -119,9 +119,21 @@ public class AccountsService {
         }
     }
 
-
     public Long getUserIdByKcId(String kcId) {
         Long userId = feignUserRepository.getUserByKeycloakId(kcId);
         return userId;
     }
+
+    public void addMoney(DepositMoneyRequest request, Long userId) throws ResourceNotFoundException {
+            getCardById(request.getCardId(), userId);
+            Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
+            if(accountOptional.isEmpty()) {
+                throw new ResourceNotFoundException("Account not found");
+            } else {
+                Account account = accountOptional.get();
+                account.setBalance(account.getBalance() + request.getAmount());
+                accountsRepository.save(account);
+            }
+    }
+
 }

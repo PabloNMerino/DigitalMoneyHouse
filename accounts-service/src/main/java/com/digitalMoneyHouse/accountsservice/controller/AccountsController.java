@@ -80,4 +80,12 @@ public class AccountsController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/deposit")
+    public ResponseEntity<?> depositMoney(@RequestBody DepositMoneyRequest request) throws ResourceNotFoundException {
+        String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId=  accountsService.getUserIdByKcId(kcId);
+        accountsService.addMoney(request, userId);
+        return ResponseEntity.ok("Money was added successfully to your account");
+    }
+
 }

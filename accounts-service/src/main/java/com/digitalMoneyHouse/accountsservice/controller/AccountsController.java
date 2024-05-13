@@ -89,7 +89,7 @@ public class AccountsController {
     }
 
     @PostMapping("/send-money")
-    public ResponseEntity<?> sendMoney(@RequestBody TransactionRequest transactionRequest) {
+    public ResponseEntity<?> sendMoney(@RequestBody TransactionRequest transactionRequest) throws BadRequestException {
         String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId=  accountsService.getUserIdByKcId(kcId);
         return ResponseEntity.status(HttpStatus.OK).body(accountsService.sendMoney(transactionRequest, userId));

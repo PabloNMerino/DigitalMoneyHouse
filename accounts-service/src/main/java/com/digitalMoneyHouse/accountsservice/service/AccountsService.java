@@ -137,15 +137,32 @@ public class AccountsService {
             }
     }
 
-    public Transaction sendMoney(TransactionRequest transactionRequest, Long originUserId) {
+    public Transaction sendMoney(TransactionRequest transactionRequest, Long originUserId) throws BadRequestException {
         String aliasPattern = "\\b(?:[a-zA-Z]+\\.?)+\\b";
+        String cvuPattern = "[0-9]+";
+
+        checkTransactionData(transactionRequest);
         int destinyUserId;
+
         if(transactionRequest.getDestinyAccount().matches(aliasPattern)) {
             destinyUserId = Math.toIntExact(feignUserRepository.getUserIdByAlias(transactionRequest.getDestinyAccount()));
-        } else {
+        } else if (transactionRequest.getDestinyAccount().matches(cvuPattern) && transactionRequest.getDestinyAccount().length()==16) {
             destinyUserId = Math.toIntExact(feignUserRepository.getUserIdByCvu(transactionRequest.getDestinyAccount()));
-        }
+            } else
+            {
+                throw new BadRequestException("Invalid destiny account");
+            }
+
         return feignTransactionRepository.createTransaction(new CreateTransaction(Math.toIntExact(originUserId), destinyUserId, transactionRequest.getAmount(), LocalDate.now()));
+    }
+
+    private void checkTransactionData(TransactionRequest transactionRequest) throws BadRequestException {
+        if(transactionRequest.getDestinyAccount().equals("") || transactionRequest.getDestinyAccount()==null) {
+            throw new BadRequestException("No destiny account added");
+        }
+        if(transactionRequest.getAmount() == 0.0 || transactionRequest.getAmount()==null) {
+            throw new BadRequestException("No amount added");
+        }
     }
 
 }

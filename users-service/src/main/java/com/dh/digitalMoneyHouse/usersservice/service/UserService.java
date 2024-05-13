@@ -43,6 +43,8 @@ public class UserService {
 
     public UserDTO createUser (UserRegistrationDTO userInformation) throws Exception {
 
+        checkUserRequest(userInformation);
+
         Optional<User> userEmailOptional = userRepository.findByEmail(userInformation.email());
         Optional<User> userUsernameOptional = userRepository.findByUsername(userInformation.username());
         List<User> users = userRepository.findAll();
@@ -96,6 +98,19 @@ public class UserService {
         feignAccountRepository.createAccount(new AccountRequest(userSaved.getId()));
 
         return new UserDTO(userInformation.name(), userInformation.lastName(), userInformation.username(), userInformation.email(), userInformation.phoneNumber(), newCvu, newAlias);
+    }
+
+    private void checkUserRequest(UserRegistrationDTO userInformation) throws BadRequestException {
+        String phoneNumberPattern = "\\b\\d+\\b";
+        String emailPattern = "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b";
+        if(userInformation.name().isEmpty()     ||
+           userInformation.lastName().isEmpty() ||
+           userInformation.username().isEmpty() ||
+           !userInformation.email().matches(emailPattern) ||
+           !userInformation.phoneNumber().matches(phoneNumberPattern) ||
+           userInformation.password().isEmpty()) {
+            throw new BadRequestException("Field wrong or missing");
+        }
     }
 
     public UserDTO getUserById(Long id) {
@@ -173,12 +188,15 @@ public class UserService {
     }
 
     private void checkAliasField (String alias) throws BadRequestException {
+
+        String pattern = "\\b(?:[a-zA-Z]+\\.?)+\\b";
+
         if (alias == null || alias.length() == 0) {
             throw new BadRequestException("No alias found");
         }
 
-        if (Character.isDigit(alias.charAt(0))) {
-            throw new BadRequestException("Alias can't start with a number");
+        if (!alias.matches(pattern)) {
+            throw new BadRequestException("Alias can't contain numbers");
         }
 
         if(alias.trim().length()<=3) {

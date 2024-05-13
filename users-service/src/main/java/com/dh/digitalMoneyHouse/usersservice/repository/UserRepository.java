@@ -15,6 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByAlias(String alias);
 
+    Optional<User> findByCvu(String alias);
+
     Optional<User> findByKeycloakId(String id);
 
 }

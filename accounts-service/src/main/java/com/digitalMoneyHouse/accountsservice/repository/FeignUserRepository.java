@@ -18,4 +18,10 @@ public interface FeignUserRepository {
     @GetMapping("/keycloak-id/{kcId}")
     Long getUserByKeycloakId(@PathVariable String kcId);
 
+    @GetMapping("/alias/{alias}")
+    Long getUserIdByAlias(@PathVariable String alias);
+
+    @GetMapping("/cvu/{cvu}")
+    Long getUserIdByCvu(@PathVariable String cvu);
+
 }

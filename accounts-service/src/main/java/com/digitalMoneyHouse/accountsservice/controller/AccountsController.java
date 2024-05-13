@@ -88,4 +88,11 @@ public class AccountsController {
         return ResponseEntity.ok("Money was added successfully to your account");
     }
 
+    @PostMapping("/send-money")
+    public ResponseEntity<?> sendMoney(@RequestBody TransactionRequest transactionRequest) {
+        String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId=  accountsService.getUserIdByKcId(kcId);
+        return ResponseEntity.status(HttpStatus.OK).body(accountsService.sendMoney(transactionRequest, userId));
+    }
+
 }

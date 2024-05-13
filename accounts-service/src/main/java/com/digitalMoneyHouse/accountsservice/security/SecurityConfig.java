@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/account/card/{id}")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/account/delete-card/{id}")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/account/deposit")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/account/send-money")).authenticated()
                         .anyRequest().permitAll()
                 )
                 .cors(AbstractHttpConfigurer::disable)

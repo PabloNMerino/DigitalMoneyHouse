@@ -24,4 +24,10 @@ public class Transaction {
 
     private LocalDate date;
 
+    public Transaction(int senderId, int receiverId, Double amountOfMoney, LocalDate date) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.amountOfMoney = amountOfMoney;
+        this.date = date;
+    }
 }

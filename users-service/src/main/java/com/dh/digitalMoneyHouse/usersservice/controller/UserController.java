@@ -102,5 +102,15 @@ public class UserController {
     public ResponseEntity<?> getUserByKeycloakId(@PathVariable String kcId) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserIdByKcId(kcId));
     }
+
+    @GetMapping("/alias/{alias}")
+    public ResponseEntity<?> getUserIdByAlias(@PathVariable String alias) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserIdByAlias(alias));
+    }
+
+    @GetMapping("/cvu/{cvu}")
+    public ResponseEntity<?> getUserIdByCvu(@PathVariable String cvu) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserIdByCvu(cvu));
+    }
 }
 

@@ -2,6 +2,7 @@ package com.digitalMoneyHouse.transactionsservice.service;
 
 import com.digitalMoneyHouse.transactionsservice.entities.Account;
 import com.digitalMoneyHouse.transactionsservice.entities.Transaction;
+import com.digitalMoneyHouse.transactionsservice.entities.TransactionRequest;
 import com.digitalMoneyHouse.transactionsservice.exceptions.ResourceNotFoundException;
 import com.digitalMoneyHouse.transactionsservice.repository.FeignAccountRepository;
 import com.digitalMoneyHouse.transactionsservice.repository.TransactionRepository;
@@ -23,9 +24,8 @@ public class TransactionService {
         this.feignAccountRepository = feignAccountRepository;
     }
 
-    public Transaction createTransaction(Transaction transaction) {
-        transactionRepository.save(transaction);
-        return transaction;
+    public Transaction createTransaction(TransactionRequest transaction) {
+        return transactionRepository.save(new Transaction(transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmountOfMoney(), transaction.getDate()));
     }
 
     public Optional<Account> getAccount(Long userId) {

@@ -2,6 +2,7 @@ package com.digitalMoneyHouse.transactionsservice.controller;
 
 import com.digitalMoneyHouse.transactionsservice.entities.Account;
 import com.digitalMoneyHouse.transactionsservice.entities.Transaction;
+import com.digitalMoneyHouse.transactionsservice.entities.TransactionRequest;
 import com.digitalMoneyHouse.transactionsservice.exceptions.ResourceNotFoundException;
 import com.digitalMoneyHouse.transactionsservice.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class TransactionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
+    public ResponseEntity<?> createTransaction(@RequestBody TransactionRequest transaction) {
 
         try{
             Optional<Account> fromAccountOptional = transactionService.getAccount((long) transaction.getSenderId());

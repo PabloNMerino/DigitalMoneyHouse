@@ -233,5 +233,22 @@ public class UserService {
             return userOptional.get().getId();
         }
     }
+    public Long getUserIdByAlias(String alias) {
+        Optional<User> userOptional = userRepository.findByAlias(alias);
+        if(userOptional.isEmpty()) {
+            throw new ResourceNotFoundException("User not found");
+        } else {
+            return userOptional.get().getId();
+        }
+    }
+
+    public Long getUserIdByCvu(String cvu) {
+        Optional<User> userOptional = userRepository.findByCvu(cvu);
+        if(userOptional.isEmpty()) {
+            throw new ResourceNotFoundException("User not found");
+        } else {
+            return userOptional.get().getId();
+        }
+    }
 
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -134,6 +135,17 @@ public class AccountsService {
                 account.setBalance(account.getBalance() + request.getAmount());
                 accountsRepository.save(account);
             }
+    }
+
+    public Transaction sendMoney(TransactionRequest transactionRequest, Long originUserId) {
+        String aliasPattern = "\\b(?:[a-zA-Z]+\\.?)+\\b";
+        int destinyUserId;
+        if(transactionRequest.getDestinyAccount().matches(aliasPattern)) {
+            destinyUserId = Math.toIntExact(feignUserRepository.getUserIdByAlias(transactionRequest.getDestinyAccount()));
+        } else {
+            destinyUserId = Math.toIntExact(feignUserRepository.getUserIdByCvu(transactionRequest.getDestinyAccount()));
+        }
+        return feignTransactionRepository.createTransaction(new CreateTransaction(Math.toIntExact(originUserId), destinyUserId, transactionRequest.getAmount(), LocalDate.now()));
     }
 
 }

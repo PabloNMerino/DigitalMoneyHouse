@@ -59,5 +59,13 @@ public class TransactionService {
         feignAccountRepository.updateBalance(account, account.getId());
     }
 
+    public Transaction getTransactionById(Long accountId, Long transactionId) throws ResourceNotFoundException {
+        Optional<Transaction> transactionOptional = transactionRepository.findTransaction(accountId, transactionId);
+        if(transactionOptional.isEmpty()) {
+            throw new ResourceNotFoundException("No transaction was found with the provided id");
+        } else {
+            return transactionOptional.get();
+        }
+    }
 
 }

@@ -44,6 +44,13 @@ public class AccountsController {
         return ResponseEntity.status(HttpStatus.OK).body(accountsService.getAllTransactions(userId));
     }
 
+    @GetMapping("/activity/{transactionId}")
+    public ResponseEntity<?> getTransaction(@PathVariable Long transactionId) throws ResourceNotFoundException {
+        String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId=  accountsService.getUserIdByKcId(kcId);
+        return ResponseEntity.status(HttpStatus.OK).body(accountsService.getTransaction(userId, transactionId));
+    }
+
     @PostMapping("/register-card")
     public ResponseEntity<?> registerNewCard(@RequestBody CardRequest card) throws ResourceNotFoundException {
         String kcId = SecurityContextHolder.getContext().getAuthentication().getName();

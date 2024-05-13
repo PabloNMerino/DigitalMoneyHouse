@@ -68,6 +68,16 @@ public class AccountsService {
         return transactions;
     }
 
+    public Transaction getTransaction(Long userId, Long transactionId) throws ResourceNotFoundException {
+        Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
+        if(accountOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Account not found");
+        } else {
+            Account account = accountOptional.get();
+            return feignTransactionRepository.getTransaction(account.getId(), transactionId);
+        }
+    }
+
     public Card registerCard(@RequestBody CardRequest card, Long userId) throws ResourceNotFoundException {
         Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
         if(accountOptional.isEmpty()) {

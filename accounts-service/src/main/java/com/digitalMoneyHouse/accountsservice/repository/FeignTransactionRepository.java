@@ -4,6 +4,7 @@ import com.digitalMoneyHouse.accountsservice.entities.Transaction;
 import com.digitalMoneyHouse.accountsservice.feignCustomExceptions.CustomErrorDecoder;
 import com.digitalMoneyHouse.accountsservice.feignCustomExceptions.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -17,4 +18,7 @@ public interface FeignTransactionRepository {
 
     @GetMapping("/getAll/{userId}")
     List<Transaction> getAllTransactions(@PathVariable Long userId);
+
+    @GetMapping("/{transactionId}/account/{accountId}")
+    Transaction getTransaction(@PathVariable Long accountId, @PathVariable Long transactionId);
 }

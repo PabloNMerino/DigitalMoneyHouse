@@ -75,4 +75,10 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(transactionsOptional.get());
     }
 
+    @GetMapping("/{transactionId}/account/{accountId}")
+    public ResponseEntity<?> getTransaction(@PathVariable Long accountId, @PathVariable Long transactionId) throws ResourceNotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(transactionService.getTransactionById(accountId, transactionId));
+
+    }
+
 }

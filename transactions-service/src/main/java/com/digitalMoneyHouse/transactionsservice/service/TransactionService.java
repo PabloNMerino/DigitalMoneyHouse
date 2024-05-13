@@ -46,12 +46,12 @@ public class TransactionService {
         return Optional.of(lastFiveTransactions);
     }
 
-    public Optional<List<Transaction>> getAllTransactions() throws ResourceNotFoundException {
-        List<Transaction> lastFiveTransactions = transactionRepository.findAll();
-        if(lastFiveTransactions==null || lastFiveTransactions.isEmpty()) {
+    public Optional<List<Transaction>> getAllTransactions(Long userId) throws ResourceNotFoundException {
+        List<Transaction> transactions = transactionRepository.getAllTransactionsById(userId);
+        if(transactions==null) {
             throw new ResourceNotFoundException("No transactions found");
         }
-        return Optional.of(lastFiveTransactions);
+        return Optional.of(transactions);
     }
 
 

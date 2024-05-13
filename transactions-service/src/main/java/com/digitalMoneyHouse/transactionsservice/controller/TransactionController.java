@@ -69,9 +69,9 @@ public class TransactionController {
     }
 
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<Transaction>> getAllTransactions() throws ResourceNotFoundException {
-        Optional<List<Transaction>> transactionsOptional = transactionService.getAllTransactions();
+    @GetMapping("/getAll/{userId}")
+    public ResponseEntity<List<Transaction>> getAllTransactions(@PathVariable Long userId) throws ResourceNotFoundException {
+        Optional<List<Transaction>> transactionsOptional = transactionService.getAllTransactions(userId);
         return ResponseEntity.status(HttpStatus.OK).body(transactionsOptional.get());
     }
 

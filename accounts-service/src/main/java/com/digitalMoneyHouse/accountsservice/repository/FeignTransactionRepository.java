@@ -14,4 +14,7 @@ public interface FeignTransactionRepository {
 
     @GetMapping("/lastTransactions/{userId}")
     List<Transaction> getLastFiveTransactions(@PathVariable Long userId);
+
+    @GetMapping("/getAll/{userId}")
+    List<Transaction> getAllTransactions(@PathVariable Long userId);
 }

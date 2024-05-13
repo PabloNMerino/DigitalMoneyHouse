@@ -29,6 +29,8 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(new AntPathRequestMatcher("/account/transactions")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/account/activity")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/account/register-card")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/account/cards")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/account/card/{id}")).authenticated()

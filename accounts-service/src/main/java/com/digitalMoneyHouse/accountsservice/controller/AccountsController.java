@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class AccountsController {
     @Autowired
     private AccountsService accountsService;
+
+    @GetMapping("/hola")
+    public String saludar() {
+        return "Hola desde Corrientes! 🐊";
+    }
     @PostMapping("/create")
     public void createAccount(@RequestBody AccountRequest accountRequest) {
         accountsService.createAccount(accountRequest.getUserId());

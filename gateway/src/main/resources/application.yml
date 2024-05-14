@@ -15,6 +15,12 @@ spring:
           predicates:
             - Path=/user/**
 
+        - id: accounts-service
+          uri: lb://accounts-service
+          predicates:
+            - Path=/account/**
+
+
 management:
   endpoints:
     web:

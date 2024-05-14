@@ -56,7 +56,7 @@ public class AliasCvuGenerator {
 
         StringBuilder cvu= new StringBuilder("7031990");
 
-        for(int i=0; i<9; i++) {
+        for(int i=0; i<15; i++) {
             int randomNumber = random.nextInt(10);
             cvu.append(randomNumber);
         }

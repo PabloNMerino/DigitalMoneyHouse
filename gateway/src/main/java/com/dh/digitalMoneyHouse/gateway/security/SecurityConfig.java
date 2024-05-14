@@ -15,6 +15,7 @@ public class SecurityConfig {
              authorizeExchangeSpec -> authorizeExchangeSpec
                 .pathMatchers("/user/register").permitAll()
                 .pathMatchers("/user/login").permitAll()
+                .pathMatchers("/user/{username}/forgot-password").permitAll()
                 .anyExchange().authenticated()
                 )
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)

@@ -5,6 +5,8 @@ import com.digitalMoneyHouse.accountsservice.exceptions.ConflictException;
 import com.digitalMoneyHouse.accountsservice.exceptions.ResourceNotFoundException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 public class CustomErrorDecoder  implements ErrorDecoder {
     private final ErrorDecoder errorDecoder = new Default();

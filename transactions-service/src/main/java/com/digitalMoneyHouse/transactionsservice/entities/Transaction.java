@@ -1,14 +1,20 @@
 package com.digitalMoneyHouse.transactionsservice.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 
 import java.time.LocalDate;
 
+@Builder
 @Entity
 @Data
 @Table(name = "transactions")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Transaction {
 
     @Id
@@ -30,4 +36,5 @@ public class Transaction {
         this.amountOfMoney = amountOfMoney;
         this.date = date;
     }
+
 }

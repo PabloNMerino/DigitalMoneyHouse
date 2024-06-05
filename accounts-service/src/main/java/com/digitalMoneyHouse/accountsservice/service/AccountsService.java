@@ -43,7 +43,7 @@ public class AccountsService {
         if(accountOptional.isPresent()) {
             Account accountFound = accountOptional.get();
             User feignUser = feignUserRepository.getUserById(userId);
-            return new AccountInformation(accountFound.getId(), accountFound.getUserId() ,accountFound.getBalance(), feignUser.getAlias(), feignUser.getCvu());
+            return new AccountInformation(accountFound.getId(), accountFound.getUserId() ,accountFound.getBalance(), feignUser.getCvu(), feignUser.getAlias());
         } else {
             throw new ResourceNotFoundException("Account not found");
         }

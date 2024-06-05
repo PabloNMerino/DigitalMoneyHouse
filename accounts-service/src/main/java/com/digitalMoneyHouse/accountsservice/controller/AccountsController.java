@@ -30,6 +30,13 @@ public class AccountsController {
         return ResponseEntity.status(HttpStatus.OK).body(accountsService.getAccountInformation(id));
     }
 
+    @GetMapping("/user-information")
+    public ResponseEntity<?> getAccount() throws ResourceNotFoundException {
+        String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId=  accountsService.getUserIdByKcId(kcId);
+        return ResponseEntity.status(HttpStatus.OK).body(accountsService.getAccountInformation(userId));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAccount(@RequestBody Account account, @PathVariable Long id) {
         return new ResponseEntity<>(accountsService.updateAccount(account), HttpStatus.OK);

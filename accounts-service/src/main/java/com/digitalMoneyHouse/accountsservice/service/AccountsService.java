@@ -110,13 +110,13 @@ public class AccountsService {
         }
     }
 
-    public void deleteCardById(Long cardId, Long userId) throws ResourceNotFoundException {
+    public void deleteCardByNumber(String cardNumber, Long userId) throws ResourceNotFoundException {
         Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
         if(accountOptional.isEmpty()) {
             throw new ResourceNotFoundException("Account not found");
         } else {
             Account account = accountOptional.get();
-            feignCardRepository.deleteCard(account.getId(), cardId);
+            feignCardRepository.deleteCard(account.getId(), cardNumber);
         }
     }
 

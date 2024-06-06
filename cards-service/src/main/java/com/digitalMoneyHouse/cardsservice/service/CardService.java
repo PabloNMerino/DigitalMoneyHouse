@@ -68,13 +68,13 @@ public class CardService {
         return optionalCardList.get();
     }
     @Transactional
-    public void deleteCard(Long cardId, Long accountId) throws ResourceNotFoundException {
-        Optional<Card> optionalCard = cardRepository.findByIdAndAccountId(cardId, accountId);
+    public void deleteCard(String cardNumber, Long accountId) throws ResourceNotFoundException {
+        Optional<Card> optionalCard = cardRepository.findByNumberAndAccountId(cardNumber, accountId);
         if(optionalCard.isEmpty()) {
             throw new ResourceNotFoundException("Card not found");
         } else {
             Card cardFound = optionalCard.get();
-            cardRepository.deleteByIdAndAccountId(cardId, accountId);
+            cardRepository.deleteByIdAndAccountId(cardFound.getId(), accountId);
         }
     }
 }

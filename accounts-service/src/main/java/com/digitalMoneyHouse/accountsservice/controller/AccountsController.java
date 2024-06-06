@@ -84,11 +84,11 @@ public class AccountsController {
         return ResponseEntity.status(HttpStatus.OK).body(accountsService.getCardById(id, userId));
     }
 
-    @DeleteMapping("/delete-card/{id}")
-    public ResponseEntity<?> deleteCardById(@PathVariable Long id) throws ResourceNotFoundException {
+    @DeleteMapping("/delete-card/{cardNumber}")
+    public ResponseEntity<?> deleteCardById(@PathVariable String cardNumber) throws ResourceNotFoundException {
         String kcId = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId=  accountsService.getUserIdByKcId(kcId);
-        accountsService.deleteCardById(id, userId);
+        accountsService.deleteCardByNumber(cardNumber, userId);
         return ResponseEntity.ok().build();
     }
 

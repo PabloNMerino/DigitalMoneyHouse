@@ -21,6 +21,6 @@ public interface FeignCardRepository {
     @GetMapping("/{accountId}/card/{cardId}")
     Card getCardByIdAndAccountId (@PathVariable Long accountId, @PathVariable Long cardId);
 
-    @DeleteMapping("/{accountId}/card/{cardId}")
-    void deleteCard(@PathVariable Long accountId, @PathVariable Long cardId);
+    @DeleteMapping("/{accountId}/card/{cardNumber}")
+    void deleteCard(@PathVariable Long accountId, @PathVariable String cardNumber);
 }

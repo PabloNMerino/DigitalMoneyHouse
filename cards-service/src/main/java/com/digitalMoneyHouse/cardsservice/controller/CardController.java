@@ -33,10 +33,10 @@ public class CardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cardService.registerCard(card));
     }
 
-    @DeleteMapping("/{accountId}/card/{cardId}")
+    @DeleteMapping("/{accountId}/card/{cardNumber}")
     @Transactional
-    public ResponseEntity<?> deleteCard(@PathVariable Long accountId, @PathVariable Long cardId) throws ResourceNotFoundException {
-        cardService.deleteCard(cardId, accountId);
+    public ResponseEntity<?> deleteCard(@PathVariable Long accountId, @PathVariable String cardNumber) throws ResourceNotFoundException {
+        cardService.deleteCard(cardNumber, accountId);
         return ResponseEntity.ok().build();
     }
 }

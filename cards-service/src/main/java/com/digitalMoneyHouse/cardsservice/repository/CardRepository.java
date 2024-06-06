@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface CardRepository extends JpaRepository<Card, Long> {
 
     Optional<Card> findByIdAndAccountId(Long id, Long accountId);
+
+    Optional<Card> findByNumberAndAccountId(String number, Long accountId);
     Optional<List<Card>> findAllByAccountId(Long accountId);
     void deleteByIdAndAccountId(Long id, Long accountId);
 

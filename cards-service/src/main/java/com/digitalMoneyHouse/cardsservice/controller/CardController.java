@@ -28,6 +28,11 @@ public class CardController {
         return ResponseEntity.status(HttpStatus.OK).body(cardService.getCardByIdAndAccountId(cardId, accountId));
     }
 
+    @GetMapping("/{accountId}/cardNumber/{cardNumber}")
+    public ResponseEntity<?> getCardByNumberAndAccountId (@PathVariable Long accountId, @PathVariable String cardNumber) throws ResourceNotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(cardService.getCardByNumberAndAccountId(cardNumber, accountId));
+    }
+
     @PostMapping("/register-card")
     public ResponseEntity<?> registerCard(@RequestBody Card card) throws BadRequestException, ConflictException {
         return ResponseEntity.status(HttpStatus.CREATED).body(cardService.registerCard(card));

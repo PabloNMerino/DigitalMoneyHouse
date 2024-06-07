@@ -4,6 +4,7 @@ import com.digitalMoneyHouse.accountsservice.entities.Card;
 import com.digitalMoneyHouse.accountsservice.feignCustomExceptions.CustomErrorDecoder;
 import com.digitalMoneyHouse.accountsservice.feignCustomExceptions.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,4 +24,8 @@ public interface FeignCardRepository {
 
     @DeleteMapping("/{accountId}/card/{cardNumber}")
     void deleteCard(@PathVariable Long accountId, @PathVariable String cardNumber);
+
+    @GetMapping("/{accountId}/cardNumber/{cardNumber}")
+    Card getCardByNumberAndAccountId (@PathVariable Long accountId, @PathVariable String cardNumber);
+
 }

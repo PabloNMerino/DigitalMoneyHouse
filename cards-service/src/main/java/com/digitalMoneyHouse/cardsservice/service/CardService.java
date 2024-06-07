@@ -60,6 +60,15 @@ public class CardService {
         }
     }
 
+    public Card getCardByNumberAndAccountId(String cardNumber, Long accountId) throws ResourceNotFoundException {
+        Optional<Card> cardOptional = cardRepository.findByNumberAndAccountId(cardNumber, accountId);
+        if(cardOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Card not found");
+        } else {
+            return cardOptional.get();
+        }
+    }
+
     public List<Card> getAllCardsByAccountId(Long accountId) throws ResourceNotFoundException {
         Optional<List<Card>> optionalCardList = cardRepository.findAllByAccountId(accountId);
         if (optionalCardList.isEmpty()) {

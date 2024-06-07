@@ -110,6 +110,16 @@ public class AccountsService {
         }
     }
 
+    public Card getCardByNumber(String cardNumber, Long userId) throws ResourceNotFoundException {
+        Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
+        if(accountOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Account not found");
+        } else {
+            Account account = accountOptional.get();
+            return feignCardRepository.getCardByNumberAndAccountId(account.getId(), cardNumber);
+        }
+    }
+
     public void deleteCardByNumber(String cardNumber, Long userId) throws ResourceNotFoundException {
         Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
         if(accountOptional.isEmpty()) {
@@ -126,7 +136,8 @@ public class AccountsService {
     }
 
     public void addMoney(DepositMoneyRequest request, Long userId) throws ResourceNotFoundException {
-            getCardById(request.getCardId(), userId);
+            Card card = getCardByNumber(request.getCardNumber(), userId);
+        System.out.println(card.getNumber() + " --- " + card.getHolder());
             Optional<Account> accountOptional = accountsRepository.findByUserId(userId);
             if(accountOptional.isEmpty()) {
                 throw new ResourceNotFoundException("Account not found");

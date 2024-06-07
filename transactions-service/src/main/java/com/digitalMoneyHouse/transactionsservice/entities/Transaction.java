@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Entity
@@ -28,9 +29,9 @@ public class Transaction {
     @Column(name = "Balance")
     private Double amountOfMoney;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
-    public Transaction(int senderId, int receiverId, Double amountOfMoney, LocalDate date) {
+    public Transaction(int senderId, int receiverId, Double amountOfMoney, LocalDateTime date) {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.amountOfMoney = amountOfMoney;

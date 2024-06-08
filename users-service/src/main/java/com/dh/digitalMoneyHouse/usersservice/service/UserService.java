@@ -1,10 +1,7 @@
 package com.dh.digitalMoneyHouse.usersservice.service;
 
 import com.dh.digitalMoneyHouse.usersservice.entities.*;
-import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewAliasRequest;
-import com.dh.digitalMoneyHouse.usersservice.entities.dto.NewPasswordRequest;
-import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserDTO;
-import com.dh.digitalMoneyHouse.usersservice.entities.dto.UserRegistrationDTO;
+import com.dh.digitalMoneyHouse.usersservice.entities.dto.*;
 import com.dh.digitalMoneyHouse.usersservice.entities.dto.mapper.UserDTOMapper;
 import com.dh.digitalMoneyHouse.usersservice.exceptions.BadRequestException;
 import com.dh.digitalMoneyHouse.usersservice.exceptions.ResourceNotFoundException;
@@ -166,7 +163,7 @@ public class UserService {
         userRepository.save(userFound);
     }
 
-    public UserDTO updateUser(String id, UserRegistrationDTO userRegistrationDTO) throws BadRequestException {
+    public UserDTO updateUser(String id, UpdateUserRequest updateUserRequest) throws BadRequestException {
         Optional<User> userOptional = userRepository.findByKeycloakId(id);
 
         if(userOptional.isEmpty()) {
@@ -175,11 +172,10 @@ public class UserService {
 
         User userFound = userOptional.get();
 
-        userFound.setName(userRegistrationDTO.name());
-        userFound.setLastName(userRegistrationDTO.lastName());
-        userFound.setEmail(userRegistrationDTO.email());
-        userFound.setPhoneNumber(userRegistrationDTO.phoneNumber());
-        userFound.setPassword(userRegistrationDTO.password());
+        userFound.setName(updateUserRequest.name());
+        userFound.setLastName(updateUserRequest.lastName());
+        userFound.setEmail(updateUserRequest.email());
+        userFound.setPhoneNumber(updateUserRequest.phoneNumber());
 
         userRepository.save(userFound);
         keycloakService.updateUser(userOptional.get(), userFound);

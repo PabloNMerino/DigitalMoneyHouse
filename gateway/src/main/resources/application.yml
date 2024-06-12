@@ -9,16 +9,35 @@ spring:
         serviceId: config-server
         enabled: true
     gateway:
+      globalcors:
+          add-to-simple-url-handler-mapping: true
+          cors-configurations:
+            '[/**]':
+              allowedOrigins: "*"
+              allowedHeaders: '*'
+              allowedMethods:
+                - GET
+                - POST
+                - PUT
+                - PATCH
+                - DELETE
       routes:
         - id: users-service
           uri: lb://users-service
           predicates:
             - Path=/user/**
-
         - id: accounts-service
           uri: lb://accounts-service
           predicates:
             - Path=/account/**
+          metadata:
+            cors:
+              allowedOrigins: '*'
+              allowedMethods:
+                - GET
+                - POST
+              allowedHeaders: '*'
+              maxAge: 30
 
 
 management:

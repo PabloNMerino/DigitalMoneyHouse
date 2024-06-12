@@ -4,6 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig {
@@ -18,14 +26,28 @@ public class SecurityConfig {
                 .pathMatchers("/user/{username}/forgot-password").permitAll()
                 .anyExchange().authenticated()
                 )
+                /*
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .cors(ServerHttpSecurity.CorsSpec::disable)
+
+                 */
+
+                .csrf(csrfSpec -> csrfSpec.disable())
+                //.cors(corsSpec -> corsSpec.disable())
+
+
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
                                 .jwkSetUri("http://localhost:8080/realms/dh-money-users/protocol/openid-connect/certs")
                         )
                 );
+
         return http.build();
     }
+
+
+
+
+
 
 }

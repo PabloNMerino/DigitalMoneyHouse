@@ -13,14 +13,23 @@ spring:
           add-to-simple-url-handler-mapping: true
           cors-configurations:
             '[/**]':
-              allowedOrigins: "*"
-              allowedHeaders: '*'
+              #allowedOrigins: "http://localhost:5173"
+              #allowedHeaders: '*'
               allowedMethods:
                 - GET
                 - POST
                 - PUT
                 - PATCH
                 - DELETE
+                - OPTIONS
+              allowedHeaders:
+                - Origin
+                - X-Requested-With
+                - Content-Type
+                - Accept
+                - Authorization
+              allowCredentials: true
+              maxAge: 3600
       routes:
         - id: users-service
           uri: lb://users-service

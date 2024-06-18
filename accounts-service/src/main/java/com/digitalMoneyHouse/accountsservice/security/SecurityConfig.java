@@ -35,6 +35,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(new AntPathRequestMatcher("/account/user-information")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/account/transactions")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/account/activity")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/account/activity/{transactionId}")).authenticated()
@@ -46,19 +47,8 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/account/send-money")).authenticated()
                         .anyRequest().permitAll()
                 )
-
-                //.cors(AbstractHttpConfigurer::disable)
-                //.csrf(AbstractHttpConfigurer::disable)
-
-
-
                 .csrf(csrf-> csrf.disable())
-                //.cors(cors->cors.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                .cors(cors->cors.configurationSource(corsConfigurationSource()))
-
-
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter)
@@ -71,19 +61,5 @@ public class SecurityConfig {
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withJwkSetUri(baseUrl.concat("/protocol/openid-connect/certs")).build();
     }
-
-
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        //configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
-        configuration.setAllowedHeaders(Arrays.asList("Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-
-
 
 }

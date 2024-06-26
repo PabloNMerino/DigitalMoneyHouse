@@ -55,7 +55,7 @@ public class KeycloakService {
         userRepresentation.setEmail(userKeycloak.getEmail());
         userRepresentation.setFirstName(userKeycloak.getName());
         userRepresentation.setLastName(userKeycloak.getLastName());
-        userRepresentation.setEmailVerified(false);
+        userRepresentation.setEmailVerified(true);
         attributes.put("phoneNumber", Collections.singletonList(String.valueOf(userKeycloak.getPhoneNumber())));
         userRepresentation.setAttributes(attributes);
 
@@ -86,7 +86,7 @@ public class KeycloakService {
         if(emailsFound.isEmpty()) {
             System.out.println("No emails registered");
         }
-
+/*
         List<UserRepresentation> userRepresentations = getRealm().users().searchByUsername(userKeycloak.getUsername(), true);
         if(!CollectionUtils.isEmpty(userRepresentations)) {
             UserRepresentation userRepresentation1 = userRepresentations.stream().filter(userRep -> Objects.equals(false, userRep.isEmailVerified())).findFirst().orElse(null);
@@ -94,17 +94,17 @@ public class KeycloakService {
             emailVerification(userRepresentation1.getId());
             System.out.println("------ EMAIL SENT TO USER " + userRepresentation1.getId());
         }
-
+*/
         userRepresentation.setId(CreatedResponseUtil.getCreatedId(response));
 
         return User.toUser(userRepresentation);
     }
-
+/*
     public void emailVerification(String userId) {
         UsersResource usersResource = getRealm().users();
         usersResource.get(userId).sendVerifyEmail();
     }
-
+*/
     public AccessKeycloak login(Login login) throws Exception {
         try{
 

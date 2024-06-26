@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "cards-service", url = "localhost:8085/card", configuration = {FeignConfig.class, CustomErrorDecoder.class})
+@FeignClient(name = "cards-service", url = "http://cards-service:8085/card", configuration = {FeignConfig.class, CustomErrorDecoder.class})
 public interface FeignCardRepository {
 
     @PostMapping("/register-card")

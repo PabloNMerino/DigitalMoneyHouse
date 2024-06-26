@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "users-service", url = "localhost:8081/user", configuration = {FeignConfig.class, CustomErrorDecoder.class})
+@FeignClient(name = "users-service", url = "http://users-service:8081/user", configuration = {FeignConfig.class, CustomErrorDecoder.class})
 public interface FeignUserRepository {
 
     @GetMapping("/{id}")

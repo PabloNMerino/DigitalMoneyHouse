@@ -50,3 +50,7 @@ https://drive.google.com/file/d/1Ep6cm5LBT3DgZ-_9SzRfOiaI5tzNGkP3/view?usp=shari
 
 ### QA Sign Off
 https://drive.google.com/file/d/1ptS_YLeEIqcHfXARxK8idnglYGgI8NB6/view?usp=sharing
+
+### Diagrama Infraestructura
+![infraestructura](https://github.com/PabloNMerino/DigitalMoneyHouse/assets/44982651/333a1538-fa06-477c-b11c-5abdf08a2024)
+

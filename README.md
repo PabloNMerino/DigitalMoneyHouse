@@ -19,6 +19,9 @@ Tambien se puede observar:
 - Tarjetas registradas
 - transferencias realizadas o recibidas (con detalle de transferencia)
 
+### Video de presentacion
+https://youtu.be/8vZuR8ChDqA
+
 ### Microservicios
 - eureka-server: servicio de registro y descubrimiento de servicios.
 - config-server: servicio de configuraciones de los microservicios alojado en github.

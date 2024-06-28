@@ -99,7 +99,7 @@ https://drive.google.com/file/d/1ptS_YLeEIqcHfXARxK8idnglYGgI8NB6/view?usp=shari
 > 5. abrir enlace de localhost y acceder al frontend para empezar a usar la aplicación
 
 > [!WARNING]
-> Las transferencias solamente son posibles entre usuarios de Digital Money House, no se admiten transferencias entre usuarios de otras aplicaciones.
+> Las transferencias solamente son posibles entre usuarios de Digital Money House, no se admiten transferencias con usuarios de otras aplicaciones.
 
 ## Usuarios actualmente registrados
 

@@ -20,7 +20,7 @@ Tambien se puede observar:
 - transferencias realizadas o recibidas (con detalle de transferencia)
 
 ### Video de presentacion
-https://youtu.be/8vZuR8ChDqA
+[![Alt text](https://img.youtube.com/vi/8vZuR8ChDqA/0.jpg)](https://www.youtube.com/watch?v=8vZuR8ChDqA)
 
 ### Microservicios
 - eureka-server: servicio de registro y descubrimiento de servicios.

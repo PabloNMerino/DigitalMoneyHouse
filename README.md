@@ -67,6 +67,12 @@ https://docs.google.com/spreadsheets/d/1CVAqSheq23vQ2jKCDrjxH-sBpVBzrfu-/edit?us
 
 
 > [!NOTE]
+> ### Testing Automatizado
+
+https://github.com/PabloNMerino/testing-automatizado-DMH.git
+
+
+> [!NOTE]
 > ### Testing KickOff
 
 https://drive.google.com/file/d/1Ep6cm5LBT3DgZ-_9SzRfOiaI5tzNGkP3/view?usp=sharing
